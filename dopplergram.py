@@ -1,10 +1,20 @@
+import datetime
+
+start = datetime.datetime.now()
 import matplotlib.pyplot as plt
-
+print("matplotlib time ", datetime.datetime.now() - start)
+start = datetime.datetime.now()
 import astropy.units as u
+print("astropy units time ", datetime.datetime.now() - start)
+start = datetime.datetime.now()
 from astropy.coordinates import SkyCoord
-
+print("astropy coords time ", datetime.datetime.now() - start)
+start = datetime.datetime.now()
 import sunpy.map
+print("sunpy.map time ", datetime.datetime.now() - start)
+start = datetime.datetime.now()
 from sunpy.coordinates import HeliographicStonyhurst
+print("sunpy coords time ", datetime.datetime.now() - start)
 
 class Dopplergram:
 	def __init__(self, path):
@@ -40,7 +50,11 @@ class Dopplergram:
 
 		"""
 		TODO: plot should be a separate method (or maybe shouldn't even be here)
+		TODO 2: rect_offset is not a good solution --> solve somehow else
 		"""
+
+		rect_offset_x = origin[0]
+		rect_offset_y = origin[1]
 
 		smap = self.smap
 		origin = self._get_heliographic_stonyhurst_origin(origin)
@@ -56,12 +70,14 @@ class Dopplergram:
 		)
 
 		out_map = smap.reproject_to(out_header)
-		out_map.plot_settings = smap.plot_settings
 
 		print("data ", out_map.data)
 		print("shape ", out_map.data.shape)
 
 		if to_plot:
+
+			out_map.plot_settings = smap.plot_settings
+
 			fig = plt.figure(figsize=(8, 4))
 
 			ax = fig.add_subplot(1, 2, 1, projection=smap)
@@ -70,7 +86,7 @@ class Dopplergram:
 			smap.draw_limb(axes=ax, color='white')
 			ax.plot_coord(origin, 'o', color='red', fillstyle='none', markersize=20)
 
-			bottom_left = SkyCoord(-shape[0]/2*scale[0]*u.deg, -shape[1]/2*scale[1]*u.deg,
+			bottom_left = SkyCoord((rect_offset_x - shape[0]/2*scale[0])*u.deg, (rect_offset_y - shape[1]/2*scale[1])*u.deg,
                        frame=HeliographicStonyhurst, obstime=smap.date)
 			smap.draw_quadrangle(bottom_left, width=shape[0]*scale[0]*u.deg, height=shape[1]*scale[1]*u.deg,
                     edgecolor='green', linewidth=1.5)
@@ -88,8 +104,13 @@ class Dopplergram:
 	def _get_heliographic_stonyhurst_origin(self, origin):
 
 		smap = self.smap
-		origin_hpc = SkyCoord(origin[0]*u.arcsec, origin[1]*u.arcsec, frame=smap.coordinate_frame)
-		origin = origin_hpc.heliographic_stonyhurst
+		#fits_header = smap.fits_header
+
+		origin = SkyCoord(origin[0]*u.deg, origin[1]*u.deg, frame=HeliographicStonyhurst, obstime=smap.date)
+
+		### OLD IMPLEMENTATION - DON'T DELETE YET
+		#origin_hpc = SkyCoord(origin[0]*u.arcsec, origin[1]*u.arcsec, frame=smap.coordinate_frame)
+		#origin = origin_hpc.heliographic_stonyhurst
 
 		return origin
 
