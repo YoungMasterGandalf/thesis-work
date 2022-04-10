@@ -1,20 +1,7 @@
-import datetime
-
-start = datetime.datetime.now()
-import matplotlib.pyplot as plt
-print("matplotlib time ", datetime.datetime.now() - start)
-start = datetime.datetime.now()
 import astropy.units as u
-print("astropy units time ", datetime.datetime.now() - start)
-start = datetime.datetime.now()
 from astropy.coordinates import SkyCoord
-print("astropy coords time ", datetime.datetime.now() - start)
-start = datetime.datetime.now()
 import sunpy.map
-print("sunpy.map time ", datetime.datetime.now() - start)
-start = datetime.datetime.now()
-from sunpy.coordinates import HeliographicStonyhurst
-print("sunpy coords time ", datetime.datetime.now() - start)
+from sunpy.coordinates import HeliographicCarrington
 
 class Dopplergram:
 	def __init__(self, path):
@@ -22,13 +9,13 @@ class Dopplergram:
 		self.smap = None
 		self.data = None
 
-	def get_postel_projected_data(self, origin = (0, 0), shape = (512, 512), scale: list = [0.12, 0.12]):
+	def get_postel_projected_data(self, origin = (0, 0), shape = (512, 512), scale: list = [0.12, 0.12], make_plot: bool = True):
 
 		"""
 		Returns a numpy array of shape "shape" containing the projected subdata.
 
 		Arguments:
-		origin -- origin of the Postel projection (so far Helioprojective!!!)
+		origin -- origin of the Postel projection (Heliographic Carrington coordinates)
 		shape -- shape of the desired data matrix in pixels
 		scale -- scaling vector --> deg/px
 		"""
@@ -36,7 +23,7 @@ class Dopplergram:
 		self._create_sunpy_map_from_file(self.path)
 		self.data = self.smap.data
 
-		projected_map = self._postel_project_map(origin, shape, scale)
+		projected_map = self._postel_project_map(origin, shape, scale, make_plot)
 
 		return projected_map.data
 
@@ -46,7 +33,7 @@ class Dopplergram:
 		#aia_map.plot_settings['norm'].vmin = 0
 		#aia_map.plot_settings['norm'].vmax = 10000
 
-	def _postel_project_map(self, origin, shape, scale, to_plot=True):
+	def _postel_project_map(self, origin, shape, scale, make_plot):
 
 		"""
 		TODO: plot should be a separate method (or maybe shouldn't even be here)
@@ -57,7 +44,7 @@ class Dopplergram:
 		rect_offset_y = origin[1]
 
 		smap = self.smap
-		origin = self._get_heliographic_stonyhurst_origin(origin)
+		origin = self._get_heliographic_carrington_origin(origin)
 
 		#out_shape = (512, 512)
 		out_shape = shape
@@ -74,7 +61,9 @@ class Dopplergram:
 		print("data ", out_map.data)
 		print("shape ", out_map.data.shape)
 
-		if to_plot:
+		if make_plot:
+
+			import matplotlib.pyplot as plt
 
 			out_map.plot_settings = smap.plot_settings
 
@@ -87,7 +76,7 @@ class Dopplergram:
 			ax.plot_coord(origin, 'o', color='red', fillstyle='none', markersize=20)
 
 			bottom_left = SkyCoord((rect_offset_x - shape[0]/2*scale[0])*u.deg, (rect_offset_y - shape[1]/2*scale[1])*u.deg,
-                       frame=HeliographicStonyhurst, obstime=smap.date)
+                       frame=HeliographicCarrington, obstime=smap.date, observer=smap.observer_coordinate)
 			smap.draw_quadrangle(bottom_left, width=shape[0]*scale[0]*u.deg, height=shape[1]*scale[1]*u.deg,
                     edgecolor='green', linewidth=1.5)
 
@@ -101,12 +90,11 @@ class Dopplergram:
 
 		return out_map
 
-	def _get_heliographic_stonyhurst_origin(self, origin):
+	def _get_heliographic_carrington_origin(self, origin):
 
 		smap = self.smap
-		#fits_header = smap.fits_header
 
-		origin = SkyCoord(origin[0]*u.deg, origin[1]*u.deg, frame=HeliographicStonyhurst, obstime=smap.date)
+		origin = SkyCoord(origin[0]*u.deg, origin[1]*u.deg, frame=HeliographicCarrington, obstime=smap.date, observer=smap.observer_coordinate)
 
 		### OLD IMPLEMENTATION - DON'T DELETE YET
 		#origin_hpc = SkyCoord(origin[0]*u.arcsec, origin[1]*u.arcsec, frame=smap.coordinate_frame)
