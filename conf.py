@@ -2,6 +2,7 @@
 
 data_conf = {
     "path": "./data/test_mag/hmi.m_45s.20101020_000000_TAI.2.magnetogram.fits"
+    #"path": "./data/test_doppl/hmi.v_45s.20181129_000000_TAI.2.Dopplergram.fits"
 }
 
 postel_conf = {

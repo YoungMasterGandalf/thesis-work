@@ -30,8 +30,6 @@ class Dopplergram:
 	def _create_sunpy_map_from_file(self, filepath: str):
 
 		self.smap = sunpy.map.Map(filepath)
-		#aia_map.plot_settings['norm'].vmin = 0
-		#aia_map.plot_settings['norm'].vmax = 10000
 
 	def _postel_project_map(self, origin, shape, scale, make_plot):
 
@@ -57,9 +55,12 @@ class Dopplergram:
 		)
 
 		out_map = smap.reproject_to(out_header)
-
+		print("HEADER ", out_map.fits_header)
+		print("TOP RIGHT COORD ", out_map.top_right_coord)
+		print("BOTTOM LEFT COORD ", out_map.bottom_left_coord)
 		print("data ", out_map.data)
 		print("shape ", out_map.data.shape)
+		print("FRAME ", out_map.coordinate_frame)
 
 		if make_plot:
 
@@ -85,6 +86,11 @@ class Dopplergram:
 			out_map.draw_grid(axes=ax, color='blue')
 			out_map.draw_limb(axes=ax, color='blue')
 			ax.plot_coord(origin, 'o', color='red', fillstyle='none', markersize=20)
+
+			### Green former quadrangle projected on the Postel map 
+			#out_map.draw_quadrangle(bottom_left, width=shape[0]*scale[0]*u.deg, height=shape[1]*scale[1]*u.deg,
+            #        edgecolor='green', linewidth=1.5)
+
 			ax.set_title('Postel projection centered at ROI', y=-0.1)
 			plt.show()
 
@@ -94,11 +100,8 @@ class Dopplergram:
 
 		smap = self.smap
 
-		origin = SkyCoord(origin[0]*u.deg, origin[1]*u.deg, frame=HeliographicCarrington, obstime=smap.date, observer=smap.observer_coordinate)
-
-		### OLD IMPLEMENTATION - DON'T DELETE YET
-		#origin_hpc = SkyCoord(origin[0]*u.arcsec, origin[1]*u.arcsec, frame=smap.coordinate_frame)
-		#origin = origin_hpc.heliographic_stonyhurst
+		origin = SkyCoord(origin[0]*u.deg, origin[1]*u.deg, frame=HeliographicCarrington, obstime=smap.date, 
+					observer=smap.observer_coordinate, rsun=696000*u.km)
 
 		return origin
 
