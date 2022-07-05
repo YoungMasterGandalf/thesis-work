@@ -3,13 +3,12 @@
 data_conf = {
     ##"path": "./data/test_mag/hmi.m_45s.20101020_000000_TAI.2.magnetogram.fits",
     #"path": "./data/test_doppl/hmi.v_45s.20181129_000000_TAI.2.Dopplergram.fits"
-    "path": "C:\\Users\\42077\\OneDrive - Univerzita Karlova\\Diplomka\\Diplomka\\Dopplerograms\\hmi.v_45s.20181129_000000_TAI.2.Dopplergram.fits",
-    "folder_path": "C:/Users/42077/OneDrive - Univerzita Karlova/Diplomka/Diplomka/Dopplerograms"
+    "path": "D:\\0_VSE\\hmi.v_45s.20100701_000000_TAI.2.Dopplergram.fits",
+    "folder_path": "D:/0_VSE"
 }
 
 postel_conf = {
-    #"origin": (137.51482, 5.5117860),
-    "origin": (250, 0),
+    "origin": (143, -20),
     "shape": (512, 512),
     #"scale": [0.0301, 0.0301],
     "scale": [0.12, 0.12],
@@ -19,6 +18,6 @@ postel_conf = {
 
 output_conf = {
     "save_file": True,
-    "output_dir": ".",
-    "filename": "test_file2.fits"
+    "output_dir": "D:/0_VSE",
+    "filename": "test_datacube.fits"
 }

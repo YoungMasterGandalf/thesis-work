@@ -118,8 +118,8 @@ class Dopplergram:
 		return origin
 
 
-def create_datacube_from_files_in_folder(folder_path: str):
-	# TODO: 1. Add support for user defined speed of ref point movement, 2. Add differential rotation
+def create_datacube_iterator_from_files_in_folder(folder_path: str):
+	# TODO: 1. Add support for user defined speed of ref point movement, 2. Add differential rotation, 3. Add paralellization
 
 	"""
 	Looks into specified path, iterates through all of the present .fits files and returns a 3-D numpy array of shape (x-shape, y-shape, time-shape) containing series 
@@ -140,32 +140,32 @@ def create_datacube_from_files_in_folder(folder_path: str):
 		print(e)
 		return None
 
-	datacube_list = []
+	# datacube_list = []
 
-	start1 = datetime.datetime.now()
 	for i, filename in enumerate(file_object):
+		
 		file_path = os.path.join(folder_path, filename)
 		
 		if os.path.isfile(file_path):
 			dg = Dopplergram(file_path)
 			start = datetime.datetime.now()
 			data = dg.get_postel_projected_data(origin=origin, shape=shape, scale=scale, make_plot=make_plot)
-			print(f"PROJECTION {i} RUNTIME ", datetime.datetime.now() - start)
+			projection_time = datetime.datetime.now() - start
+			print(f"PROJECTION {i} RUNTIME ", projection_time)
 
-			datacube_list.append(data.tolist())
+			# datacube_list.append(data.tolist())
 			
 			if i == 0:
 				header_dict["T_REC_FI"] = [dg.smap.date.value, "Observation time of the first image"]
-				#t_rec_fi = dg.smap.date
 
 			if i == len(list(file_object)) - 1:
 				header_dict["T_REC_LA"] = [dg.smap.date.value, "Observation time of the last image"]
-				#t_rec_la = dg.smap.date
-	print("FOR LOOP RUNTIME ", datetime.datetime.now() - start1)
 
-	datacube_array = np.array(datacube_list)
+			yield data
 
-	return datacube_array
+	# datacube_array = np.array(datacube_list)
+
+	# return datacube_array
 
 
 def create_fits_file_from_data_array(datacube_array: np.array, output_dir: str = ".", filename: str = "test.fits"):
@@ -201,3 +201,14 @@ def create_fits_file_from_data_array(datacube_array: np.array, output_dir: str =
 	hdul.writeto(os.path.join(output_dir, filename), overwrite=True)
 
 	print("HEADER ", hdu.header)
+
+def stack_images(iterable, shape):
+	
+	datacube = np.zeros(shape)
+
+	for i, item in enumerate(iterable):
+		print("INDEX ", i)
+		print(f"DATACUBE {i} SHAPE ", datacube[i].shape)
+		datacube += item
+
+	return datacube
