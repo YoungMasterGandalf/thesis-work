@@ -38,4 +38,4 @@ if __name__ == "__main__":
 	print("TOTAL RUNTIME ", datetime.datetime.now() - start)
 	
 	if save_file:
-		create_fits_file_from_data_array(datacube_array, origin, output_dir, filename)
+		create_fits_file_from_data_array(datacube_array, output_dir, filename)
