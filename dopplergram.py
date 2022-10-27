@@ -148,8 +148,8 @@ def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0,
 		time_delta_relative_to_base = index_relative_to_base*time_step
 		
 		if os.path.isfile(file_path):
-			dg = Dopplergram(file_path, time_delta_relative_to_base=time_delta_relative_to_base)
 			start = datetime.datetime.now()
+			dg = Dopplergram(file_path, time_delta_relative_to_base=time_delta_relative_to_base)
 			data = dg.get_postel_projected_data(origin=origin, shape=shape, scale=scale, make_plot=make_plot)
 			print(f"PROJECTION {i} RUNTIME ", datetime.datetime.now() - start)
 
