@@ -196,6 +196,10 @@ def create_fits_file_from_data_array(datacube_array: np.array, output_dir: str =
 				hdu.header[hdr_key] = hdr_value
 
 	hdul = fits.HDUList([hdu])
+
+	if not os.isdir(output_dir):
+		os.makedirs(output_dir)
+
 	hdul.writeto(os.path.join(output_dir, filename), overwrite=True)
 
 	print("HEADER ", hdu.header)
