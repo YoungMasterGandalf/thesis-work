@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import datetime
-import yaml
 
 import astropy.units as u
 from astropy.coordinates import SkyCoord
@@ -10,6 +9,7 @@ import sunpy.map
 from sunpy.coordinates import HeliographicCarrington, RotatedSunFrame
 
 import header_info as hi
+from conf import PATH, FOLDER_PATH, ORIGIN, SHAPE, TIME_STEP, SCALE, MAKE_PLOT, R_SUN, ARTIFICIAL_LON_VELOCITY, SAVE_FILE, OUTPUT_DIR, FILENAME
 
 
 class Dopplergram:
@@ -19,8 +19,7 @@ class Dopplergram:
 		self.data = self.smap.data
 		self.time_delta_relative_to_base = time_delta_relative_to_base * u.second
 
-	def get_postel_projected_data(self, origin = (0, 0), shape = (512, 512), scale: list = [0.12, 0.12], r_sun:float=696., 
-										artificial_lon_velocity:float=0., make_plot: bool = True):
+	def get_postel_projected_data(self):
 
 		"""
 		Returns a numpy array of shape "shape" containing the projected subdata.
@@ -31,33 +30,33 @@ class Dopplergram:
 		scale -- scaling vector --> deg/px
 		"""
 
-		projected_map = self._postel_project_map(origin, shape, scale, r_sun, artificial_lon_velocity, make_plot)
+		projected_map = self.postel_project_map()
 
 		return projected_map.data
 
-	def _postel_project_map(self, origin, shape, scale, r_sun, artificial_lon_velocity, make_plot):
+	def postel_project_map(self):
 
 		"""
 		TODO: plot should be a separate method (or maybe shouldn't even be here)
 		TODO 2: rect_offset is not a good solution --> solve somehow else
 		"""
 
-		rect_offset_x = origin[0]
-		rect_offset_y = origin[1]
+		rect_offset_x = ORIGIN[0]
+		rect_offset_y = ORIGIN[1]
 
-		origin = self._get_heliographic_carrington_origin(origin, r_sun, artificial_lon_velocity)
+		origin = self.get_heliographic_carrington_origin()
 
-		out_shape = shape
+		out_shape = SHAPE
 		out_header = sunpy.map.make_fitswcs_header(
 		    out_shape,
 		    origin,
-		    scale=scale*u.deg/u.pix,
+		    scale=SCALE*u.deg/u.pix,
 		    projection_code="ARC"
 		)
 
 		out_map = self.smap.reproject_to(out_header)
 
-		if make_plot:
+		if MAKE_PLOT:
 
 			import matplotlib.pyplot as plt
 
@@ -71,9 +70,9 @@ class Dopplergram:
 			self.smap.draw_limb(axes=ax, color='white')
 			ax.plot_coord(origin, 'o', color='red', fillstyle='none', markersize=20)
 
-			bottom_left = SkyCoord((rect_offset_x - shape[0]/2*scale[0])*u.deg, (rect_offset_y - shape[1]/2*scale[1])*u.deg,
+			bottom_left = SkyCoord((rect_offset_x - SHAPE[0]/2*SCALE[0])*u.deg, (rect_offset_y - SHAPE[1]/2*SCALE[1])*u.deg,
                        frame=HeliographicCarrington, obstime=self.smap.date, observer=self.smap.observer_coordinate)
-			self.smap.draw_quadrangle(bottom_left, width=shape[0]*scale[0]*u.deg, height=shape[1]*scale[1]*u.deg,
+			self.smap.draw_quadrangle(bottom_left, width=SHAPE[0]*SCALE[0]*u.deg, height=SHAPE[1]*SCALE[1]*u.deg,
                     edgecolor='green', linewidth=1.5)
 
 			ax = fig.add_subplot(1, 2, 2, projection=out_map)
@@ -91,11 +90,11 @@ class Dopplergram:
 
 		return out_map
 
-	def _get_heliographic_carrington_origin(self, origin, r_sun:float=696., artificial_lon_velocity:float=0.):
+	def get_heliographic_carrington_origin(self):
 
-		origin = origin * u.deg
-		r_sun = r_sun * u.Mm
-		artificial_lon_velocity = artificial_lon_velocity * u.m/u.second
+		origin = ORIGIN * u.deg
+		r_sun = R_SUN * u.Mm
+		artificial_lon_velocity = ARTIFICIAL_LON_VELOCITY * u.m/u.second
 
 		carrington_frame = HeliographicCarrington(obstime=self.smap.date, 
 					observer=self.smap.observer_coordinate, rsun=r_sun)
@@ -120,8 +119,7 @@ class Dopplergram:
 		return radius
 
 
-def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0, origin:list=[0.,0.], shape:list=[512, 512], scale:list=[0.12, 0.12],
-											artificial_lon_velocity:float=0.0, make_plot:bool=False):
+def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0):
 
 	"""
 	Looks into specified path, iterates through all of the present .fits files and returns a 3-D numpy array of shape (x-shape, y-shape, time-shape) containing series 
@@ -150,7 +148,7 @@ def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0,
 		if os.path.isfile(file_path):
 			start = datetime.datetime.now()
 			dg = Dopplergram(file_path, time_delta_relative_to_base=time_delta_relative_to_base)
-			data = dg.get_postel_projected_data(origin=origin, shape=shape, scale=scale, make_plot=make_plot)
+			data = dg.get_postel_projected_data()
 			print(f"PROJECTION {i} RUNTIME ", datetime.datetime.now() - start)
 
 			datacube_list.append(data.tolist())
@@ -179,20 +177,12 @@ def create_fits_file_from_data_array(datacube_array: np.array, output_dir: str =
 	filename -- name of the .fits file
 	"""
 
-	with open("conf.yml", "r") as f:
-		conf = yaml.safe_load(f)
-
-	postel_conf = conf["postel_conf"]
-	origin = postel_conf["origin"]
-	scale = postel_conf["scale"]
-	r_sun = postel_conf["r_sun"]
-
-	hi.header_dict["CRLN_REF"] = [origin[0], "Carrington lon of the reference point"]
-	hi.header_dict["CRLT_REF"] = [origin[1], "Carrington lat of the reference point"]
-	hi.header_dict["DAXIS1"] = [scale[0]*np.pi/180, "Scaling factor - x axis [rad/px]"]
-	hi.header_dict["DAXIS2"] = [scale[1]*np.pi/180, "Scaling factor - y axis [rad/px]"]
-	hi.header_dict["DAXIS3"] = [datacube_array.shape[2], "Dimension - t axis [seconds]"]
-	hi.header_dict["RSUN_MM"] = [r_sun, "Sun's radius in megameters"]
+	hi.header_dict["CRLN_REF"] = [ORIGIN[0], "Carrington lon of the reference point"]
+	hi.header_dict["CRLT_REF"] = [ORIGIN[1], "Carrington lat of the reference point"]
+	hi.header_dict["DAXIS1"] = [SCALE[0]*np.pi/180, "Scaling factor - x axis [rad/px]"]
+	hi.header_dict["DAXIS2"] = [SCALE[1]*np.pi/180, "Scaling factor - y axis [rad/px]"]
+	hi.header_dict["DAXIS3"] = [TIME_STEP, "Scaling factor - t axis (time step) [seconds]"]
+	hi.header_dict["RSUN_MM"] = [R_SUN, "Sun's radius in megameters"]
 	
 
 	print("SHAPE ", datacube_array.shape)

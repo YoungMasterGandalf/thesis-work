@@ -1,3 +1,7 @@
+# Configuration using YAML --> DISABLED for now --> using conf.py instead 
+# Possible future usecase if storing sensitive info (database logins etc.) needed
+
+
 data_conf:
   path: "./data/test_doppl/hmi.v_45s.20181129_000000_TAI.2.Dopplergram.fits"
   folder_path: "./data/test_doppl"
