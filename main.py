@@ -34,7 +34,7 @@ if __name__ == "__main__":
 	# data = dg.get_postel_projected_data(origin=origin, shape=shape, scale=scale, r_sun=r_sun, artificial_lon_velocity=artificial_lon_velocity, make_plot=make_plot)
 	
 	start = datetime.datetime.now()
-	datacube_array = create_datacube_from_files_in_folder(folder_path=folder_path)
+	datacube_array = create_datacube_from_files_in_folder(folder_path, time_step, origin, shape, scale, artificial_lon_velocity, make_plot)
 	print("TOTAL RUNTIME ", datetime.datetime.now() - start)
 	
 	if save_file:
