@@ -6,7 +6,7 @@ import astropy.units as u
 from astropy.coordinates import SkyCoord
 from astropy.io import fits
 import sunpy.map
-from sunpy.coordinates import HeliographicCarrington, RotatedSunFrame
+from sunpy.coordinates import HeliographicCarrington
 
 import header_info as hi
 from conf import PATH, FOLDER_PATH, ORIGIN, SHAPE, TIME_STEP, SCALE, MAKE_PLOT, R_SUN, ARTIFICIAL_LON_VELOCITY, SAVE_FILE, OUTPUT_DIR, FILENAME
@@ -101,16 +101,13 @@ class Dopplergram:
 
 		origin = SkyCoord(origin[0], origin[1], frame=carrington_frame)
 		
-		diffrot_origin = RotatedSunFrame(base=origin, duration=self.time_delta_relative_to_base)
-		transformed_diffrot_origin = diffrot_origin.transform_to(carrington_frame)
-		
 		radius = self._calculate_circle_of_latitude_radius(r_sun, latitude=origin.lat)
 		angular_velocity = (artificial_lon_velocity/radius).si # omega = v/r
 		angle = angular_velocity*self.time_delta_relative_to_base * u.rad # phi = omega*t
 		
-		transformed_diffrot_origin = SkyCoord(transformed_diffrot_origin.lon + angle, transformed_diffrot_origin.lat, frame=carrington_frame)
+		shifted_origin = SkyCoord(origin.lon + angle, origin.lat, frame=carrington_frame)
 		
-		return transformed_diffrot_origin
+		return shifted_origin
 
 	def _calculate_circle_of_latitude_radius(self, r_sun, latitude):
 
