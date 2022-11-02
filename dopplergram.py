@@ -9,7 +9,7 @@ import sunpy.map
 from sunpy.coordinates import HeliographicCarrington
 
 import header_info as hi
-from conf import PATH, FOLDER_PATH, ORIGIN, SHAPE, TIME_STEP, SCALE, MAKE_PLOT, R_SUN, ARTIFICIAL_LON_VELOCITY, SAVE_FILE, OUTPUT_DIR, FILENAME
+from conf import ORIGIN, SHAPE, TIME_STEP, SCALE, MAKE_PLOT, R_SUN, ARTIFICIAL_LON_VELOCITY
 
 
 class Dopplergram:
@@ -125,40 +125,36 @@ def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0)
 	Arguments:
 	folder_path -- path to the directory containing .fits files for projections
 	"""
-	
-	try:
-		file_object = os.listdir(folder_path)
-	except Exception as e:
-		print(e)
-		return None
 
-	datacube_list = []
-	file_count = len(list(file_object))
+	root, dirs, files = os.walk(folder_path)
+	files = [os.path.join(root, file) for file in files if file.endswith(".fits")]
+	
+	file_count = len(files)
 	base_index = int(file_count/2)
 
+	datacube_array = np.zeros(shape=(file_count,SHAPE[0], SHAPE[1]))
+
 	start1 = datetime.datetime.now()
-	for i, filename in enumerate(file_object):
-		file_path = os.path.join(folder_path, filename)
+	for i, file_path in enumerate(files):
+		print(f"File {i} PATH: ", file_path)
+		
 		index_relative_to_base = i - base_index
 		time_delta_relative_to_base = index_relative_to_base*time_step
 		
-		if os.path.isfile(file_path):
-			start = datetime.datetime.now()
-			dg = Dopplergram(file_path, time_delta_relative_to_base=time_delta_relative_to_base)
-			data = dg.get_postel_projected_data()
-			print(f"PROJECTION {i} RUNTIME ", datetime.datetime.now() - start)
+		start = datetime.datetime.now()
+		dg = Dopplergram(file_path, time_delta_relative_to_base=time_delta_relative_to_base)
+		data = dg.get_postel_projected_data()
+		print(f"PROJECTION {i} RUNTIME ", datetime.datetime.now() - start)
 
-			datacube_list.append(data.tolist())
-			
-			if i == 0:
-				hi.header_dict["T_REC_FI"] = [dg.smap.date.value, "Observation time of the first image"]
+		datacube_array[i] = data
+		
+		if i == 0:
+			hi.header_dict["T_REC_FI"] = [dg.smap.date.value, "Observation time of the first image"]
 
-			if i == len(list(file_object)) - 1:
-				hi.header_dict["T_REC_LA"] = [dg.smap.date.value, "Observation time of the last image"]
+		if i == file_count - 1:
+			hi.header_dict["T_REC_LA"] = [dg.smap.date.value, "Observation time of the last image"]
 		
 	print("FOR LOOP RUNTIME ", datetime.datetime.now() - start1)
-
-	datacube_array = np.array(datacube_list)
 
 	return datacube_array
 
