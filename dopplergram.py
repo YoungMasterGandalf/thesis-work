@@ -126,8 +126,7 @@ def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0)
 	folder_path -- path to the directory containing .fits files for projections
 	"""
 
-	root, dirs, files = os.walk(folder_path)
-	files = [os.path.join(root, file) for file in files if file.endswith(".fits")]
+	files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".fits")]
 	
 	file_count = len(files)
 	base_index = int(file_count/2)
