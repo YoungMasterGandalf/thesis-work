@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import scipy.linalg
 import datetime
 
 import astropy.units as u
@@ -116,6 +117,33 @@ class Dopplergram:
 		return radius
 
 
+def subtract_quadratic_surface_from_data(data: np.ndarray):
+
+	transformed_data = np.zeros((data.shape[0]*data.shape[1], 3))
+
+	current_index = 0
+	for i in range(data.shape[0]):
+		for j in range(data.shape[1]):
+			transformed_data[current_index] = [i, j, data[i,j]]
+			current_index += 1
+
+	# regular grid covering the domain of the data
+	X,Y = np.meshgrid(np.arange(data.shape[0]), np.arange(data.shape[1]))
+	XX = X.flatten()
+	YY = Y.flatten()
+
+	# best-fit quadratic curve
+	A = np.c_[np.ones(transformed_data.shape[0]), transformed_data[:,:2], np.prod(transformed_data[:,:2], axis=1), transformed_data[:,:2]**2]
+	solution, residues, rank, sing_vals = scipy.linalg.lstsq(A, transformed_data[:,2])
+	
+	# evaluate it on a grid
+	quadratic_surface_points = np.dot(np.c_[np.ones(XX.shape), XX, YY, XX*YY, XX**2, YY**2], solution).reshape(X.shape)
+
+	cleared_data = data - quadratic_surface_points
+
+	return cleared_data
+
+
 def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0):
 
 	"""
@@ -144,6 +172,10 @@ def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0)
 		dg = Dopplergram(file_path, time_delta_relative_to_base=time_delta_relative_to_base)
 		data = dg.get_postel_projected_data()
 		print(f"PROJECTION {i} RUNTIME ", datetime.datetime.now() - start)
+
+		start = datetime.datetime.now()
+		data = subtract_quadratic_surface_from_data(data)
+		print(f"Subtract quadr. surf. {i} runtime: ", datetime.datetime.now() - start)
 
 		datacube_array[i] = data
 		
