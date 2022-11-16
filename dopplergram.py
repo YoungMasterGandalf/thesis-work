@@ -165,7 +165,6 @@ def create_datacube_from_files_in_folder(folder_path: str, time_step:float=45.0)
 
 	start1 = datetime.datetime.now()
 	for i, file_path in enumerate(files):
-		print(f"File {i} PATH: ", file_path)
 		
 		index_relative_to_base = i - base_index
 		time_delta_relative_to_base = index_relative_to_base*time_step
