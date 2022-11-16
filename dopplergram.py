@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import scipy.linalg
+from symfit import Poly, variables, parameters, Model, Fit
 import datetime
 
 import astropy.units as u
@@ -119,27 +119,36 @@ class Dopplergram:
 
 def subtract_quadratic_surface_from_data(data: np.ndarray):
 
-	transformed_data = np.zeros((data.shape[0]*data.shape[1], 3))
+	x, y, z = variables('x, y, z')
+	c1, c2, c3, c4, c5, c6 = parameters('c1, c2, c3, c4, c5, c6')
 
-	current_index = 0
-	for i in range(data.shape[0]):
-		for j in range(data.shape[1]):
-			transformed_data[current_index] = [i, j, data[i,j]]
-			current_index += 1
+	## Make a polynomial. Note the `as_expr` to make it symfit friendly.
+	## --> z = f(x,y;c1,c2,c3,c4,c5,c6) = c1*x**2 + c2*y**2 + c3*x*y + c4*x + c5*y + c6
+	model_dict = {
+		z: Poly({
+			(2, 0): c1,
+			(0, 2): c2,
+			(1, 1): c3,
+			(1, 0): c4,
+			(0, 1): c5, 
+			(0, 0): c6
+		}, x, y).as_expr()
+	}
+	model = Model(model_dict)
+	print(model)
 
-	# regular grid covering the domain of the data
-	X,Y = np.meshgrid(np.arange(data.shape[0]), np.arange(data.shape[1]))
-	XX = X.flatten()
-	YY = Y.flatten()
+	# # Generate pixel meshgrid --> x, y coordinate field
+	x_vec = np.arange(data.shape[0])
+	y_vec = np.arange(data.shape[1])
+	xdata, ydata = np.meshgrid(x_vec, y_vec)
 
-	# best-fit quadratic curve
-	A = np.c_[np.ones(transformed_data.shape[0]), transformed_data[:,:2], np.prod(transformed_data[:,:2], axis=1), transformed_data[:,:2]**2]
-	solution, residues, rank, sing_vals = scipy.linalg.lstsq(A, transformed_data[:,2])
-	
-	# evaluate it on a grid
-	quadratic_surface_points = np.dot(np.c_[np.ones(XX.shape), XX, YY, XX*YY, XX**2, YY**2], solution).reshape(X.shape)
+	# Perform the fit
+	fit = Fit(model, x=xdata, y=ydata, z=data)
+	fit_result = fit.execute()
+	zfit = model(x=xdata, y=ydata, **fit_result.params).z
+	print(fit_result)
 
-	cleared_data = data - quadratic_surface_points
+	cleared_data = data - zfit
 
 	return cleared_data
 
