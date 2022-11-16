@@ -139,7 +139,9 @@ def subtract_quadratic_surface_from_data(data: np.ndarray):
 	# evaluate it on a grid
 	quadratic_surface_points = np.dot(np.c_[np.ones(XX.shape), XX, YY, XX*YY, XX**2, YY**2], solution).reshape(X.shape)
 
-	cleared_data = data - quadratic_surface_points
+	# Transpose surface fit points
+	# TODO: Inspect the code and find why is it like this --> fix and comment the code for better clarity
+	cleared_data = data - quadratic_surface_points.T
 
 	return cleared_data
 
