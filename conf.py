@@ -15,3 +15,9 @@ ARTIFICIAL_LON_VELOCITY: float = -170.0 # in [m/s] ... origin of each projection
 SAVE_FILE: bool = True
 OUTPUT_DIR = "/nfsscratch/chmurnyd/1day/datacubes"
 FILENAME = "new_quadr_surf_corr.fits"
+
+# DRMS conf (TODO: maybe find a better place to store this into, e.g. .yaml file)
+RUN_VIA_DRMS = True # if False --> takes files locally
+JSOC_EMAIL = "john.doe@matfyz.cz"
+OUT_DIR = "/home/daniel/Downloads/drms_fits_files"
+DOPPL_REQUEST = "hmi.v_45s[2022.11.01_TAI/1d@45s]"
