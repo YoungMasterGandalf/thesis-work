@@ -10,7 +10,7 @@ import sunpy.map
 from sunpy.coordinates import HeliographicCarrington
 
 import header_info as hi
-from conf import ORIGIN, SHAPE, TIME_STEP, SCALE, MAKE_PLOT, R_SUN, ARTIFICIAL_LON_VELOCITY
+from conf import ORIGIN, SHAPE, TIME_STEP, SCALE, R_SUN, ARTIFICIAL_LON_VELOCITY, TEST_MODE
 
 
 class Dopplergram:
@@ -57,7 +57,7 @@ class Dopplergram:
 
 		out_map = self.smap.reproject_to(out_header)
 
-		if MAKE_PLOT:
+		if TEST_MODE:
 
 			import matplotlib.pyplot as plt
 
@@ -81,10 +81,6 @@ class Dopplergram:
 			out_map.draw_grid(axes=ax, color='blue')
 			out_map.draw_limb(axes=ax, color='blue')
 			ax.plot_coord(origin, 'o', color='red', fillstyle='none', markersize=20)
-
-			### Green former quadrangle projected on the Postel map 
-			#out_map.draw_quadrangle(bottom_left, width=shape[0]*scale[0]*u.deg, height=shape[1]*scale[1]*u.deg,
-            #        edgecolor='green', linewidth=1.5)
 
 			ax.set_title('Postel projection centered at ROI', y=-0.1)
 			plt.show()
