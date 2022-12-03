@@ -46,4 +46,4 @@ if __name__ == "__main__":
 		create_fits_file_from_data_array(datacube_array, OUTPUT_DIR, FILENAME) 
 
 	if RUN_VIA_DRMS and DELETE_FILES_WHEN_FINISHED:
-		shutil.rmtree() # Delete fits files downloaded from JSOC, equivalent to '$ rm -rs <out_dir>'
+		shutil.rmtree(DRMS_FILES_PATH) # Delete fits files downloaded from JSOC, equivalent to '$ rm -rs <out_dir>'
