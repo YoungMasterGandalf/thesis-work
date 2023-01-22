@@ -35,9 +35,8 @@ if __name__ == "__main__":
 			save_list_to_text_file(rec_times_list, OUTPUT_DIR, rec_times_file_name)
 			if missing_rec_times_list:
 				save_list_to_text_file(missing_rec_times_list, OUTPUT_DIR, missing_rec_times_file_name)
-
-			# TODO: Change assert sanity check to either option for the user to continue or abort or just some informative message (when interpolation is finished)
-			assert not missing_rec_times_list, '\033[91m These frames are missing:\n \033[0m' + "\n".join(missing_rec_times_list)
+				missing_frames_message = '\033[91m These frames are missing:\n \033[0m' + "\n".join(missing_rec_times_list)
+				print(missing_frames_message)
 
 			dh.download_fits_files_from_jsoc(DRMS_FILES_PATH, DOPPL_REQUEST)
 

@@ -23,12 +23,15 @@ class DrmsHandler:
         record_times = record_times.apply(self._remove_substring_from_string_if_present, args = ("_TAI",)) 
         rec_times_list = record_times.to_list()
         missing_rec_times_list = []
+        time_delta_list = []
 
         for i, rec_time_str in enumerate(rec_times_list[:-1]):
             time1 = datetime.datetime.strptime(rec_time_str, datetime_format)
             time2 = datetime.datetime.strptime(rec_times_list[i+1], datetime_format)
-
+            
             time_delta = time2 - time1
+            time_delta_list.append(time_delta.seconds)
+            
             if time_delta.seconds > time_step:
                 time1 += datetime.timedelta(seconds=time_step)
                 while time1 < time2:
