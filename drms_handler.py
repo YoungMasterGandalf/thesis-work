@@ -11,7 +11,7 @@ class DrmsHandler:
     def download_fits_files_from_jsoc(self, files_path, request):
 
         if not os.path.exists(files_path):
-            os.mkdir(files_path)
+            os.makedirs(files_path)
 
             export_request = self.client.export(request + '{Dopplergram}', method="url", protocol="fits") 
             export_request.download(files_path)
