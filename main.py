@@ -29,7 +29,6 @@ if __name__ == "__main__":
 
 			dh = DrmsHandler(jsoc_email=JSOC_EMAIL)
 			dh.create_new_jsoc_export_request(request=DOPPL_REQUEST)
-			# rec_times_list, missing_rec_times_list = dh.check_for_missing_frames_in_request(DOPPL_REQUEST, TIME_STEP)
 			rec_times_list, missing_rec_times_list = dh.check_for_missing_frames_in_request(time_step=TIME_STEP)
 
 			rec_times_file_name = f"{FILENAME}_rec_times.txt"
@@ -40,7 +39,6 @@ if __name__ == "__main__":
 				missing_frames_message = '\033[91m These frames are missing:\n \033[0m' + "\n".join(missing_rec_times_list)
 				print(missing_frames_message)
 
-			# dh.download_fits_files_from_jsoc(DRMS_FILES_PATH, DOPPL_REQUEST)
 			dh.download_fits_files_from_jsoc(files_path=DRMS_FILES_PATH)
 
 			datacube_array = create_datacube_from_files_in_folder(DRMS_FILES_PATH, TIME_STEP)
