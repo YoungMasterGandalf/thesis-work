@@ -13,7 +13,7 @@ R_SUN: float = 696.0 # in [Mm] ... Sun's radius
 ARTIFICIAL_LON_VELOCITY: float = -170.0 # in [m/s] ... origin of each projection will be moved with Sun's rotation and this velocity
 
 # Output data configuration
-OUTPUT_DIR = "/nfsscratch/chmurnyd/1day/datacubes"
+OUTPUT_DIR = "/Users/daniel/Downloads"
 FILENAME = "new_quadr_surf_corr.fits"
 
 # DRMS conf (TODO: maybe find a better place to store this into, e.g. .yaml file)
