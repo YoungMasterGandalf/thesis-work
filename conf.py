@@ -19,6 +19,6 @@ FILENAME = "new_quadr_surf_corr.fits"
 # DRMS conf (TODO: maybe find a better place to store this into, e.g. .yaml file)
 RUN_VIA_DRMS = True # if False --> takes files locally
 JSOC_EMAIL = "daniel123chmurny@gmail.com"
-DOPPL_REQUEST = "hmi.v_45s[2011.01.11_00:00:00_TAI/1d]"
-DRMS_FILES_PATH = "/home/daniel/Downloads/drms_fits_files"
+DOPPL_REQUEST = "hmi.v_45s[2011.01.11_00:00:00_TAI/1h]{Dopplergram}"
+DRMS_FILES_PATH = "/Users/daniel/Downloads/drms_temp_files"
 DELETE_FILES_WHEN_FINISHED = True # After the datacube is created: True ==> deletes downloaded .fits files (can preserve disk storage)
