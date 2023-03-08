@@ -5,7 +5,7 @@ FOLDER_PATH = "/nfsscratch/chmurnyd/1day"
 # Configuration of the Postel projection(s)
 TEST_MODE = False # if True: creates only one projection and plots it --> used for testing purposes (that all is working as expected, coordinates are reasonable etc.)
 
-ORIGIN = [70., -20.] # base point for Postel projections' origins
+ORIGIN = [117., -4.] # base point for Postel projections' origins
 SHAPE = [512, 512] # in [px] ... dimension of each projection
 TIME_STEP: float = 45.0 # in [seconds] ... time step between two consecutive files
 SCALE = [0.12, 0.12] # in [deg/px] ... scaling of the Postel projection
@@ -13,6 +13,7 @@ R_SUN: float = 696.0 # in [Mm] ... Sun's radius
 ARTIFICIAL_LON_VELOCITY: float = -170.0 # in [m/s] ... origin of each projection will be moved with Sun's rotation and this velocity
 
 # Output data configuration
+<<<<<<< Updated upstream
 OUTPUT_DIR = "/Users/daniel/Downloads"
 FILENAME = "new_quadr_surf_corr.fits"
 
