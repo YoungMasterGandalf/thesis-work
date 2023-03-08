@@ -17,8 +17,15 @@ class DrmsHandler:
 
         self._assert_export_request_created()
 
+        # If folder exists already ==> new folder with a name 'init_name_{todays_date}' is created
+        # TODO: Is this a good approach? If automated, how to pass the info about the new folder name?
         if not os.path.exists(files_path):
             os.makedirs(files_path)
+        else:
+            todays_date = str(datetime.datetime.now().date())
+            files_path = f'{files_path}_{todays_date}'
+            os.makedirs(files_path)
+            print(f"Files folder already exists, new folder created in path: '{files_path}'")
 
             # export_request = self.client.export(request + '{Dopplergram}', method="url", protocol="fits") 
             self.export_request.download(files_path)
