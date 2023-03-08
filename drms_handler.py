@@ -12,7 +12,6 @@ class DrmsHandler:
     def create_new_jsoc_export_request(self, request, method="url", protocol="fits"):
         self.export_request = self.client.export(request, method=method, protocol=protocol)
 
-    # def download_fits_files_from_jsoc(self, files_path, request):
     def download_fits_files_from_jsoc(self, files_path):
 
         self._assert_export_request_created()
@@ -27,7 +26,6 @@ class DrmsHandler:
             os.makedirs(files_path)
             print(f"Files folder already exists, new folder created in path: '{files_path}'")
 
-        # export_request = self.client.export(request + '{Dopplergram}', method="url", protocol="fits") 
         self.export_request.download(files_path)
 
     def check_for_missing_frames_in_request(self, time_step:int=45, datetime_format:str = "%Y.%m.%d_%H:%M:%S"):
@@ -37,7 +35,6 @@ class DrmsHandler:
         record_names = self.export_request.data["record"]
         record_datetimes = self._transform_record_names_to_datetimes(record_names, datetime_format=datetime_format)
  
-        # rec_times_list = record_datetimes.to_list()
         missing_rec_times_list = []
         time_delta_list = []
 
@@ -54,40 +51,9 @@ class DrmsHandler:
                     missing_rec_times_list.append(str(datetime1))
                     datetime1 += datetime.timedelta(seconds=time_step)
 
-        # rec_times_list = [str(x) for x in rec_times_list]
         rec_times_list = [str(x) for x in record_datetimes]
 
         return rec_times_list, missing_rec_times_list
-
-    # Deprecated, TODO: delete in the following commit
-    """
-    def check_for_missing_frames_in_request(self, request, time_step:int=45, datetime_format:str = "%Y.%m.%d_%H:%M:%S"):
-
-        keys = self.client.query(request, key='T_REC') 
-        record_times = keys["T_REC"]
-        # record_times = drms.to_datetime(record_times)
-        record_times = record_times.apply(self._remove_substring_from_string_if_present, args = ("_TAI",)) 
-        rec_times_list = record_times.to_list()
-        missing_rec_times_list = []
-        time_delta_list = []
-
-        for i, rec_time_str in enumerate(rec_times_list[:-1]):
-            time1 = datetime.datetime.strptime(rec_time_str, datetime_format)
-            time2 = datetime.datetime.strptime(rec_times_list[i+1], datetime_format)
-            
-            time_delta = time2 - time1
-            time_delta_list.append(time_delta.seconds)
-            
-            if time_delta.seconds > time_step:
-                time1 += datetime.timedelta(seconds=time_step)
-                while time1 < time2:
-                    missing_rec_times_list.append(str(time1))
-                    time1 += datetime.timedelta(seconds=time_step)
-
-        rec_times_list = [str(x) for x in rec_times_list]
-
-        return rec_times_list, missing_rec_times_list
-    """
 
     def _transform_record_names_to_datetimes(self, record_names, datetime_format:str = "%Y.%m.%d_%H:%M:%S"):
 
