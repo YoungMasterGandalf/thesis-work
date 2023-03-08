@@ -10,9 +10,25 @@ class DrmsHandler:
         self.export_request = None
 
     def create_new_jsoc_export_request(self, request, method="url", protocol="fits"):
+        """
+        Creates a new export request via JSOC client.
+
+        Needs to be called before any other return methods, i.e. `download_fits_files_from_jsoc` or `check_for_missing_frames_in_request`.
+
+        Parameters:
+            request: str ... JSOC request string - mainly taken from conf.py and passed from main.py
+            method:str (default: "url") ... method used in the JSOC request (look to JSOC for options)
+            protocol:str (default: "fits") ... protocol used in the JSOC request (look to JSOC for options)
+        """
         self.export_request = self.client.export(request, method=method, protocol=protocol)
 
     def download_fits_files_from_jsoc(self, files_path):
+        """
+        Calls a download method on the JSOC export request --> downloads files specified in the request from JSOC database.
+
+        Parameters:
+            files_path:str ... path to a directory, where the files will be saved (if non-existent, it will be created)
+        """
 
         self._assert_export_request_created()
 
@@ -29,6 +45,20 @@ class DrmsHandler:
         self.export_request.download(files_path)
 
     def check_for_missing_frames_in_request(self, time_step:int=45, datetime_format:str = "%Y.%m.%d_%H:%M:%S"):
+        """
+        Goes through the records of the JSOC requests and compares the time interval between them. 
+
+        Parameters:
+            time_step:int (default: 45) ... time step used to comparison between following frames to find missing frames
+            datetime_format:str (default: "%Y.%m.%d_%H:%M:%S") ... datetime format used to parse datetime strings to datetime objects
+                                                                   (datetimes are retrieved from record names which are strings)
+
+        Returns:
+            rec_times_list ... list of all frame datetimes in form of strings
+            missing_rec_times_list ... list of missing frames datetimes in form of strings
+
+            --> return rec_times_list, missing_rec_times_list
+        """
 
         self._assert_export_request_created()
 
