@@ -19,8 +19,7 @@ def read_mat_file(file_path:str):
         
     return mat
 
-def plot_powerspectrum_from_mat_object(mat_object):
-    
+def create_powerspectrum_fig_from_mat_object(mat_object, save_to:str):
     k_omega = mat_object["k_omega"]
     
     #* x axis: k (Mm^-1)
@@ -35,7 +34,7 @@ def plot_powerspectrum_from_mat_object(mat_object):
     plt.xlabel(r'$k$ (Mm$^{-1}$)')
     plt.ylabel(r'$\nu$ (mHz)')
     plt.grid(False)
-    plt.show()
+    plt.savefig(save_to, dpi=300)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -44,12 +43,22 @@ if __name__ == '__main__':
     e.g.: "/Users/daniel/Documents/diploma_thesis_sidework/komega_cube.mat_controlplots.mat" """
     parser.add_argument('file_path', type=str, help=file_path_help)
     
+    save_to_help = 'Where to save the .png plot. Write the full path ending with "/<filename>.png"!'
+    parser.add_argument('save_to', type=str, help=save_to_help)
+    
     args = parser.parse_args()
     
     FILE_PATH = args.file_path
-    assert os.path.exists(FILE_PATH), f'Entered PATH {FILE_PATH} does not exist.'
-    assert os.path.isfile(FILE_PATH), f'Entered PATH {FILE_PATH} does not lead to a file.'
+    assert os.path.exists(FILE_PATH), f'Entered PATH "{FILE_PATH}" does not exist.'
+    assert os.path.isfile(FILE_PATH), f'Entered PATH "{FILE_PATH}" does not lead to a file.'
+    
+    SAVE_TO_PATH = args.save_to
+    assert SAVE_TO_PATH.endswith(".png"), 'save_to argument must end with /<filename>.png'
+    
+    folder_path = SAVE_TO_PATH[:SAVE_TO_PATH.rfind("/")]
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
     
     mat = read_mat_file(FILE_PATH)
-    plot_powerspectrum_from_mat_object(mat_object=mat)
+    create_powerspectrum_fig_from_mat_object(mat, SAVE_TO_PATH)
     
