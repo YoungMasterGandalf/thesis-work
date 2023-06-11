@@ -1,0 +1,26 @@
+{
+    "input_data_conf": {
+        "file_path": "/nfsscratch/chmurnyd/1day/hmi.v_45s.20181129_000000_TAI.2.Dopplergram.fits",
+        "folder_path": "/nfsscratch/chmurnyd/1day"
+    },
+    "postel_projection_conf": {
+        "test_mode": false,
+        "origin": [70.0, -20.0],
+        "shape": [512, 512],
+        "time_step": 45.0,
+        "scale": [0.12, 0.12],
+        "r_sun": 696.0,
+        "artificial_lon_velocity": -170.0
+    },
+    "output_data_conf": {
+        "output_dir": "/Users/daniel/Downloads",
+        "filename": "new_quadr_surf_corr.fits"
+    },
+    "drms_conf": {
+        "run_via_drms": true,
+        "jsoc_email": "daniel123chmurny@gmail.com",
+        "doppl_request": "hmi.v_45s[2011.01.11_00:00:00_TAI/1h]{Dopplergram}",
+        "drms_files_path": "/Users/daniel/Downloads/drms_temp_files",
+        "delete_files_when_finished": true
+    }
+}
