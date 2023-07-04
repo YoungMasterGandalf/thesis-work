@@ -170,7 +170,7 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                     "working_dir": os.getcwd(),
                     "log_dir": logs_path,
                     "conf_file": conf_file_path,
-                    "TT_conf_file": travel_time_outdir_path
+                    "TT_conf_file": new_travel_time_conf_path
                 }
                 
                 datacube_maker_inputs.append(datacube_maker_input)
