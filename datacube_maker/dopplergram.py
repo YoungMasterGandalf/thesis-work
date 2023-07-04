@@ -10,8 +10,18 @@ import sunpy.map
 from sunpy.coordinates import HeliographicCarrington
 
 import header_info as hi
-from conf import ORIGIN, SHAPE, TIME_STEP, SCALE, R_SUN, ARTIFICIAL_LON_VELOCITY, TEST_MODE
+# from conf import ORIGIN, SHAPE, TIME_STEP, SCALE, R_SUN, ARTIFICIAL_LON_VELOCITY, TEST_MODE
+from conf import conf
 
+#? Is it better to declare these constants or use conf.<something> everywhere in the code?
+# TODO Daniel: Thinks this through.
+ORIGIN = conf.origin
+SHAPE = conf.shape
+TIME_STEP = conf.time_step
+SCALE = conf.scale
+R_SUN = conf.r_sun
+ARTIFICIAL_LON_VELOCITY = conf.artificial_lon_velocity
+TEST_MODE = conf.test_mode
 
 class Dopplergram:
 	def __init__(self, file_path, time_delta_relative_to_base:float=0.):
