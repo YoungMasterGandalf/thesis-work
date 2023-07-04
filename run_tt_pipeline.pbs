@@ -1,0 +1,31 @@
+#!/bin/bash
+
+
+###############################################################
+# PBS part
+###############################################################
+
+# Assigns a job name
+#PBS -N drms_tt_pipeline
+
+# Assigns the queue
+#PBS -q eternity
+
+#Join option  
+#PBS -j oe
+#PBS -M svanda@asu.cas.cz
+
+# Sends mail to the user when the job aborts, begins, end.
+#PBS -m abe
+
+#PBS -V
+PBS_O_WORKDIR=${WD}
+
+#. ~/.bashrc
+
+##############################################################
+# Execution
+##############################################################
+cd $PBS_O_WORKDIR
+
+./pipeline_dependencies ${CONFFILE}
