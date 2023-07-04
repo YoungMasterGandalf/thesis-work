@@ -1,4 +1,5 @@
 import os
+import shutil
 import json
 import numpy as np
 
@@ -33,17 +34,11 @@ RUN_VIA_DRMS: bool = True
 JSOC_EMAIL: str = "daniel123chmurny@gmail.com"
 DELETE_FILES_WHEN_FINISHED: bool = True
 
+# TRAVEL_TIMES_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/travel-times"
+TRAVEL_TIMES_ROOT_FOLDER: str = "/Users/daniel/Downloads/travel_times"
+PARAM_EXAMPLE_CONF_PATH: str = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, "PARAM-EXAMPLE.conf")
+
 ### STATIC CONF SETTINGS END ###
-
-
-# Disabled - will be moved to runner file
-# TODO Daniel: implement runner file, then delete
-"""
-def run_datacube_creation_query(working_dir:str, log_dir:str, conf_file_path:str):
-    command = f'qsub -v WD={working_dir},LD={log_dir},CONFFILE={conf_file_path} drms_datacube.pbs'
-    
-    os.system(command)
-"""
     
 def get_plus_minus_value_string_from_value(value: Union[int, float], round_value:bool=True) -> str:
     """Converts a numerical value to string representation with it's sign represented as a word.
@@ -105,19 +100,19 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                 print(f'Velocity {k}: {velocity}')
                 
                 datacube_dir_name = create_datacube_directory_name(request, origin, velocity)
-                datacube_dir_path = os.path.join(OUTPUT_ROOT_FOLDER, datacube_dir_name)
-
-                drms_temp_path = os.path.join(datacube_dir_path, "drms_temp_files")
-                logs_path = os.path.join(datacube_dir_path, "logs")
-                
+                datacube_dir_path = os.path.join(OUTPUT_ROOT_FOLDER, datacube_dir_name)                
                 print(f'Creating datacube directory: "{datacube_dir_path}"...')
                 os.makedirs(datacube_dir_path)
                 
+                drms_temp_path = os.path.join(datacube_dir_path, "drms_temp_files")
                 print(f'Creating drms files directory: "{drms_temp_path}"...')
                 os.makedirs(drms_temp_path)
                 
+                logs_path = os.path.join(datacube_dir_path, "logs")
                 print(f'Creating logs directory: "{logs_path}"...')
                 os.makedirs(logs_path)
+                
+                # travel_times_dir_path = 
                 
                 with open("datacube_maker/conf.json", "r") as file:
                     conf_dict = json.load(file)
@@ -141,10 +136,41 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                 with open(conf_file_path, "w") as file:
                     json.dump(conf_dict, file, indent=4)
                     
+                new_travel_time_conf_path = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, f'TT_{datacube_dir_name}.conf')
+                print(f'New TT conf file path: {new_travel_time_conf_path}')
+                shutil.copyfile(PARAM_EXAMPLE_CONF_PATH, new_travel_time_conf_path)
+                
+                with open(new_travel_time_conf_path, 'r') as file:
+                    conf_file_lines = file.readlines()
+                    
+                datacube_path = os.path.join(datacube_dir_path, f'{datacube_dir_name}.fits')
+                travel_time_outdir = f'TT_{datacube_dir_name}'
+                travel_time_outdir_path = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, travel_time_outdir)
+                os.makedirs(travel_time_outdir_path)
+                    
+                is_query_changed = False
+                is_outdir_changed = False
+                for i, line in enumerate(conf_file_lines):
+                    if line.startswith("p.query"):
+                        conf_file_lines[i] = f"p.query='{datacube_path}';"
+                        is_query_changed = True
+                        
+                    if line.startswith("p.outdir"):
+                        conf_file_lines[i] = f"p.outdir='{travel_time_outdir_path}';"
+                        is_outdir_changed = True
+                        
+                    if is_query_changed and is_outdir_changed:
+                        break
+                    
+                with open(new_travel_time_conf_path, 'w') as file:
+                    text = "\n".join(conf_file_lines)
+                    file.write(text)
+                    
                 datacube_maker_input = {
                     "working_dir": os.getcwd(),
                     "log_dir": logs_path,
-                    "conf_file": conf_file_path
+                    "conf_file": conf_file_path,
+                    "TT_conf_file": travel_time_outdir_path
                 }
                 
                 datacube_maker_inputs.append(datacube_maker_input)
