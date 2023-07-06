@@ -83,13 +83,11 @@ if __name__ == "__main__":
 
 			dh.download_fits_files_from_jsoc(files_path=config.drms_files_path)
 
-			# datacube_array = create_datacube_from_files_in_folder(config.shape, config.drms_files_path, config.time_step)
 			datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
 							 config.artificial_lon_velocity, config.test_mode, config.drms_files_path, config.time_step)
 			if config.delete_files_when_finished:
 				shutil.rmtree(config.drms_files_path) # Delete fits files downloaded from JSOC, equivalent to '$ rm -rs <out_dir>'
 		else:
-			# datacube_array = create_datacube_from_files_in_folder(config.shape, config.folder_path, config.time_step)
 			datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
 							 config.artificial_lon_velocity, config.test_mode, config.folder_path, config.time_step)
 		print("TOTAL RUNTIME ", datetime.datetime.now() - start) 
