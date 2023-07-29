@@ -10,6 +10,8 @@ RUN_TT_PIPELINE_WD: str = "/nfsscratch/chmurnyd/travel-times/torque"
 
 SLEEP_TIME_AFTER_FIRST_REQUEST: int = 900 # in seconds - for 1 day request 900 s (15 min) is optimal --> other request types can be scaled accordingly
 
+#! Not used now - replaced by bash function
+# TODO: Utilize or delete.
 def run_datacube_creation_query(working_dir:str, log_dir:str, conf_file_path:str):
     os.chdir(DRMS_DATACUBE_PBS_PATH)
     command = f'qsub -l nodes=radegast-local -v WD={working_dir},LD={log_dir},CONFFILE={conf_file_path} drms_datacube.pbs'
@@ -31,6 +33,7 @@ def run_traveltime_pipeline_job_on_datacube(datacube_job_id: str, conf_file_path
     print(f'Query ran succesfully. Output: {output}.')
     
     return output
+#!#!#!#!#!#!#!#!#!#!#!#!#
 
 def run_drms_and_tt_via_bash(drms_wd:str, drms_ld:str, drms_conffile:str, tt_wd:str, tt_conffile:str):
     command = f'bash run_drms_and_tt.sh {DRMS_DATACUBE_PBS_PATH} {RUN_TT_PIPELINE_PBS_PATH} {drms_wd} {drms_ld} {drms_conffile} {tt_wd} {tt_conffile}'
