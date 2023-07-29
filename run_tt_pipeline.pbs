@@ -13,10 +13,10 @@
 
 #Join option  
 #PBS -j oe
-#PBS -M svanda@asu.cas.cz
+#PBS -M daniel123chmurny@gmail.com
 
 # Sends mail to the user when the job aborts, begins, end.
-#PBS -m abe
+#PBS -m a
 
 #PBS -V
 PBS_O_WORKDIR=${WD}
@@ -28,4 +28,4 @@ PBS_O_WORKDIR=${WD}
 ##############################################################
 cd $PBS_O_WORKDIR
 
-./pipeline_dependencies ${CONFFILE}
+./pipeline_dependencies.sh ${CONFFILE}
