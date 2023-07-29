@@ -52,7 +52,7 @@ if __name__ == "__main__":
 	conf_file_path = args.conf_path
  
 	if conf_file_path is None:
-		conf_file_path = "conf.json"
+		conf_file_path = "./datacube_maker/conf.json"
 
 	config = set_up_configuration_from_json_conf_file(conf_file_path)
 
@@ -83,12 +83,15 @@ if __name__ == "__main__":
 
 			dh.download_fits_files_from_jsoc(files_path=config.drms_files_path)
 
-			datacube_array = create_datacube_from_files_in_folder(config.drms_files_path, config.time_step)
+			datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
+							 config.artificial_lon_velocity, config.test_mode, config.drms_files_path, config.time_step)
 			if config.delete_files_when_finished:
 				shutil.rmtree(config.drms_files_path) # Delete fits files downloaded from JSOC, equivalent to '$ rm -rs <out_dir>'
 		else:
-			datacube_array = create_datacube_from_files_in_folder(config.folder_path, config.time_step)
+			datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
+							 config.artificial_lon_velocity, config.test_mode, config.folder_path, config.time_step)
 		print("TOTAL RUNTIME ", datetime.datetime.now() - start) 
 
 		# TODO: There should be a default name, e.g. hmi.v_45s_2022.11.01_TAI depending on what set of dopplergrams we calculated with
-		create_fits_file_from_data_array(datacube_array, config.output_dir, config.filename) 
+		create_fits_file_from_data_array(datacube_array, config.origin, config.scale, config.time_step, config.r_sun, 
+                                   config.output_dir, config.filename) 

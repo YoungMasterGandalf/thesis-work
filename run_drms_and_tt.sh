@@ -11,7 +11,8 @@ tt_wd=$6
 tt_conffile=$7
 
 cd $drms_path
-drms_output=`qsub -l nodes=radegast-local -v WD=$drms_wd,LD=$drms_ld,CONFFILE=$drms_conffile drms_datacube.pbs`
+# drms_output=`qsub -l nodes=radegast-local -v WD=$drms_wd,LD=$drms_ld,CONFFILE=$drms_conffile drms_datacube.pbs`
+drms_output=`qsub -v WD=$drms_wd,LD=$drms_ld,CONFFILE=$drms_conffile drms_datacube.pbs`
 echo $drms_output
 
 cd $tt_path
