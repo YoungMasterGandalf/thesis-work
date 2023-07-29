@@ -1,0 +1,74 @@
+[
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_minus_168/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_minus_168/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_minus_168.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_minus_93/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_minus_93/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_minus_93.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_plus_183/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_plus_183/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_minus_20_vel_plus_183.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_minus_168/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_minus_168/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_minus_168.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_minus_93/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_minus_93/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_minus_93.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_plus_183/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_plus_183/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_70_lat_plus_20_vel_plus_183.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_minus_168/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_minus_168/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_minus_168.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_minus_93/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_minus_93/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_minus_93.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_plus_183/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_plus_183/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_minus_20_vel_plus_183.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_minus_168/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_minus_168/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_minus_168.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_minus_93/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_minus_93/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_minus_93.conf"
+    },
+    {
+        "working_dir": "/nfsscratch/chmurnyd/thesis-work/datacube_maker",
+        "log_dir": "Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_plus_183/logs",
+        "conf_file": "/nfsscratch/chmurnyd/Datacubes/hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_plus_183/conf.json",
+        "TT_conf_file": "/nfsscratch/chmurnyd/travel-times/TT_hmi.v_45s_2011.01.11_00.00.00_lon_plus_100_lat_plus_20_vel_plus_183.conf"
+    }
+]

@@ -2,23 +2,24 @@ import os
 import shutil
 import json
 import numpy as np
+import itertools
 
 from typing import Union
 
 ### AUTOMATED PART SETTINGS ###
 
 DRMS_REQUESTS: list[str] = [
-    "hmi.v_45s[2011.02.13_00:00:00_TAI/1h]{Dopplergram}",
+    "hmi.v_45s[2011.01.11_00:00:00_TAI/1d]{Dopplergram}",
     # "hmi.v_45s[2011.04.22_00:00:00_TAI/1h]{Dopplergram}",
     # "hmi.v_45s[2011.07.05_00:00:00_TAI/1h]{Dopplergram}"
 ]
-LATITUDES: list[float] = [-20., 0., 20.]
-LONGITUDES: list[float] = [70., 100., 120.]
+LATITUDES: list[float] = [-20., 20.]
+LONGITUDES: list[float] = [70., 100.]
 LOWER_VELOCITY_LIMIT: float = -300.
 UPPER_VELOCITY_LIMIT: float = 300.
-VELOCITY_SAMPLE_COUNT: int = 5
-# OUTPUT_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/Datacubes"
-OUTPUT_ROOT_FOLDER: str = "/Users/daniel/Downloads/Datacubes"
+VELOCITY_SAMPLE_COUNT: int = 3
+OUTPUT_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/Datacubes"
+#OUTPUT_ROOT_FOLDER: str = "/Users/daniel/Downloads/Datacubes"
 
 ### AUTOMATED PART SETTINGS END ###
 
@@ -34,8 +35,8 @@ RUN_VIA_DRMS: bool = True
 JSOC_EMAIL: str = "daniel123chmurny@gmail.com"
 DELETE_FILES_WHEN_FINISHED: bool = True
 
-# TRAVEL_TIMES_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/travel-times"
-TRAVEL_TIMES_ROOT_FOLDER: str = "/Users/daniel/Downloads/travel_times"
+TRAVEL_TIMES_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/travel-times"
+#TRAVEL_TIMES_ROOT_FOLDER: str = "/Users/daniel/Downloads/travel_times"
 PARAM_EXAMPLE_CONF_PATH: str = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, "PARAM-EXAMPLE.conf")
 
 ### STATIC CONF SETTINGS END ###
@@ -105,12 +106,13 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                 os.makedirs(datacube_dir_path)
                 
                 drms_temp_path = os.path.join(datacube_dir_path, "drms_temp_files")
-                print(f'Creating drms files directory: "{drms_temp_path}"...')
-                os.makedirs(drms_temp_path)
+                #print(f'Creating drms files directory: "{drms_temp_path}"...')
+                #os.makedirs(drms_temp_path)
                 
                 logs_path = os.path.join(datacube_dir_path, "logs")
                 print(f'Creating logs directory: "{logs_path}"...')
                 os.makedirs(logs_path)
+                logs_path = logs_path.replace("/nfsscratch/chmurnyd/", "") # just a hotfix --> get rid of this ASAP
                 
                 # travel_times_dir_path = 
                 
@@ -167,7 +169,7 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                     file.write(text)
                     
                 datacube_maker_input = {
-                    "working_dir": os.getcwd(),
+                    "working_dir": os.path.join(os.getcwd(), "datacube_maker"),
                     "log_dir": logs_path,
                     "conf_file": conf_file_path,
                     "TT_conf_file": new_travel_time_conf_path
@@ -182,7 +184,8 @@ if __name__ == "__main__":
         print(f'Creating root directory "{OUTPUT_ROOT_FOLDER}"...')
         os.makedirs(OUTPUT_ROOT_FOLDER)
 
-    origins = list(zip(LONGITUDES, LATITUDES))
+    #origins = list(zip(LONGITUDES, LATITUDES))
+    origins = list(itertools.product(LONGITUDES, LATITUDES))
     velocities = np.random.uniform(low=LOWER_VELOCITY_LIMIT, high=UPPER_VELOCITY_LIMIT, size=VELOCITY_SAMPLE_COUNT)
     datacube_maker_inputs = create_folder_structure(origins, velocities)
             
