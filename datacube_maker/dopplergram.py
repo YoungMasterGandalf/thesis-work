@@ -146,7 +146,7 @@ def subtract_quadratic_surface_from_data(data: np.ndarray):
 	return cleared_data
 
 def fill_nan_values_with_median(data: np.ndarray) -> np.ndarray:
-    data_median = np.median(data)
+    data_median = np.nanmedian(data)
     new_data = np.nan_to_num(data, nan=data_median)
     
     return new_data
