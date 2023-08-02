@@ -63,7 +63,8 @@ if __name__ == "__main__":
 	if config.test_mode:
 		file = config.file_path
 
-		dg = Dopplergram(file)
+		dg = Dopplergram(origin=config.origin, shape=config.shape, time_step=config.time_step, scale=config.scale, r_sun=config.r_sun, 
+                   artificial_lon_velocity=config.artificial_lon_velocity, test_mode=config.test_mode, file_path=file)
 		data = dg.get_postel_projected_data()
 	else:
 		start = datetime.datetime.now()
@@ -86,7 +87,7 @@ if __name__ == "__main__":
 			datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
 							 config.artificial_lon_velocity, config.test_mode, config.drms_files_path, config.time_step)
 			if config.delete_files_when_finished:
-				shutil.rmtree(config.drms_files_path) # Delete fits files downloaded from JSOC, equivalent to '$ rm -rs <out_dir>'
+				shutil.rmtree(config.drms_files_path) # Delete fits files downloaded from JSOC, equivalent to '$ rm -rf <out_dir>'
 		else:
 			datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
 							 config.artificial_lon_velocity, config.test_mode, config.folder_path, config.time_step)
