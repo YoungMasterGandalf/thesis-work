@@ -145,6 +145,12 @@ def subtract_quadratic_surface_from_data(data: np.ndarray):
 
 	return cleared_data
 
+def fill_nan_values_with_median(data: np.ndarray) -> np.ndarray:
+    data_median = np.median(data)
+    new_data = np.nan_to_num(data, nan=data_median)
+    
+    return new_data
+
 
 def create_datacube_from_files_in_folder(origin: list[float], shape: list[int], scale: list[float], r_sun: float, 
 					 artificial_lon_velocity: float, test_mode: bool, folder_path: str, time_step:float=45.0):
@@ -175,6 +181,8 @@ def create_datacube_from_files_in_folder(origin: list[float], shape: list[int], 
 		   time_delta_relative_to_base=time_delta_relative_to_base)
 		data = dg.get_postel_projected_data()
 		print(f"PROJECTION {i} RUNTIME ", datetime.datetime.now() - start)
+  
+		data = fill_nan_values_with_median(data)
 
 		start = datetime.datetime.now()
 		data = subtract_quadratic_surface_from_data(data)
