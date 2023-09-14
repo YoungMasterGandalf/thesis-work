@@ -1,12 +1,30 @@
 import os
 import drms
 import datetime
+import pandas as pd
+
+from urllib.request import urlretrieve
+from urllib.error import HTTPError, URLError
 
 class DrmsHandler:
     def __init__(self, jsoc_email:str):
         self.jsoc_email = jsoc_email
         self.client = drms.Client(email=self.jsoc_email, verbose=True)
         self.export_request = None
+        
+    @staticmethod
+    def _next_available_filename(fname):
+        """
+        Find next available filename, append a number if neccessary.
+        
+        Note: a copy of the same method in drms.ExportRequest
+        """
+        i = 1
+        new_fname = fname
+        while os.path.exists(new_fname):
+            new_fname = f"{fname}.{int(i)}"
+            i += 1
+        return new_fname
 
     def create_new_jsoc_export_request(self, request, method="url", protocol="fits"):
         """
@@ -21,9 +39,8 @@ class DrmsHandler:
         """
         self.export_request = self.client.export(request, method=method, protocol=protocol)
 
-    def download_fits_files_from_jsoc(self, files_path):
-        """
-        Calls a download method on the JSOC export request --> downloads files specified in the request from JSOC database.
+    def download_fits_files_from_jsoc(self, files_path: str, verbose: bool = True, download_attempts_limit: int = 25) -> pd.DataFrame:
+        """Calls a download method on the JSOC export request --> downloads files specified in the request from JSOC database.
 
         Parameters:
             files_path:str ... path to a directory, where the files will be saved (if non-existent, it will be created)
@@ -41,7 +58,54 @@ class DrmsHandler:
             os.makedirs(files_path)
             print(f"Files folder already exists, new folder created in path: '{files_path}'")
 
-        self.export_request.download(files_path)
+        #! Deprecated for own custom solution - drms solution does not support retry of download when it fails
+        # self.export_request.download(files_path)
+        
+        #* New implementation instead of export_request.download()
+        self.export_request.wait(timeout=900, verbose=verbose) # Wait for the server to process the export request.
+
+        data = self.export_request.urls
+        ndata = len(data)
+
+        downloads = []
+        for i in range(ndata):
+            di = data.iloc[i]
+            filename = di.filename
+
+            fpath = os.path.join(files_path, filename)
+            
+            download_attempt_index = 1
+            is_download_complete = False
+            
+            fpath_new = self._next_available_filename(fpath)
+            fpath_tmp = self._next_available_filename(f"{fpath_new}.part")
+            
+            while (not is_download_complete) and (download_attempt_index < download_attempts_limit):
+                if verbose:
+                    print(f"Downloading file {int(i + 1)} (try no. {download_attempt_index}) of {int(ndata)}...")
+                    print(f"    record: {di.record}")
+                    print(f"  filename: {di.filename}")
+                try:
+                    urlretrieve(di.url, fpath_tmp)
+                except (HTTPError, URLError):
+                    print(f'Download {download_attempt_index} failed.')
+                    download_attempt_index += 1
+                else:
+                    fpath_new = self._next_available_filename(fpath)
+                    os.rename(fpath_tmp, fpath_new)
+                    if verbose:
+                        print(f"  -> {os.path.relpath(fpath_new)}")
+                    is_download_complete = True
+                
+            if is_download_complete:
+                downloads.append(fpath)
+            else:
+                raise RuntimeError("File missing, download aborted.")
+
+        result = data[["record", "url"]].copy()
+        result["download"] = downloads
+
+        return result
 
     def check_for_missing_frames_in_request(self, time_step:int=45, datetime_format:str = "%Y.%m.%d_%H:%M:%S"):
         """
