@@ -42,10 +42,19 @@ class DrmsHandler:
     def download_fits_files_from_jsoc(self, files_path: str, verbose: bool = True, download_attempts_limit: int = 25) -> pd.DataFrame:
         """Calls a download method on the JSOC export request --> downloads files specified in the request from JSOC database.
 
-        Parameters:
-            files_path:str ... path to a directory, where the files will be saved (if non-existent, it will be created)
-        """
+        Args:
+            files_path (str): A path to a directory, where the files will be saved (if non-existent, it will be created).
+            verbose (bool, optional): If True, process messages are printed. Defaults to True.
+            download_attempts_limit (int, optional): Maximum number of download retries if the initial download of a file fails. 
+            Defaults to 25.
 
+        Raises:
+            RuntimeError: Raised if one of the files can't be downloaded even within the download attempts limit.
+
+        Returns:
+            pandas.DataFrame: A DataFrame containing record queries, urls and local file paths of the downloaded files.
+        """      
+          
         self._assert_export_request_created()
 
         # If folder exists already ==> new folder with a name 'init_name_{todays_date}' is created
