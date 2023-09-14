@@ -28,4 +28,4 @@ PBS_O_WORKDIR=${WD}
 ##############################################################
 cd $PBS_O_WORKDIR
 
-./pipeline_dependencies.sh ${CONFFILE}
+./pipeline-dependencies.sh ${CONFFILE}
