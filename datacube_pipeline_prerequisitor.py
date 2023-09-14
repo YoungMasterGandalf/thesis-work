@@ -138,7 +138,8 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                 with open(conf_file_path, "w") as file:
                     json.dump(conf_dict, file, indent=4)
                     
-                new_travel_time_conf_path = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, f'TT_{datacube_dir_name}.conf')
+                traveltime_conf_file_name = f'TT_{datacube_dir_name}.conf'
+                new_travel_time_conf_path = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, traveltime_conf_file_name)
                 print(f'New TT conf file path: {new_travel_time_conf_path}')
                 shutil.copyfile(PARAM_EXAMPLE_CONF_PATH, new_travel_time_conf_path)
                 
@@ -172,7 +173,7 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                     "working_dir": os.path.join(os.getcwd(), "datacube_maker"),
                     "log_dir": logs_path,
                     "conf_file": conf_file_path,
-                    "TT_conf_file": new_travel_time_conf_path
+                    "TT_conf_file": traveltime_conf_file_name
                 }
                 
                 datacube_maker_inputs.append(datacube_maker_input)
@@ -184,7 +185,6 @@ if __name__ == "__main__":
         print(f'Creating root directory "{OUTPUT_ROOT_FOLDER}"...')
         os.makedirs(OUTPUT_ROOT_FOLDER)
 
-    #origins = list(zip(LONGITUDES, LATITUDES))
     origins = list(itertools.product(LONGITUDES, LATITUDES))
     velocities = np.random.uniform(low=LOWER_VELOCITY_LIMIT, high=UPPER_VELOCITY_LIMIT, size=VELOCITY_SAMPLE_COUNT)
     datacube_maker_inputs = create_folder_structure(origins, velocities)
