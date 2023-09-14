@@ -18,6 +18,9 @@
 # Sends mail to the user when the job aborts, begins, end.
 #PBS -m a
 
+#PBS -o ${WD}/log_${PBS_JOBID}/traveltime_${PBS_JOBID}.out
+#PBS -e ${WD}/log_${PBS_JOBID}/traveltime_${PBS_JOBID}.err
+
 #PBS -V
 PBS_O_WORKDIR=${WD}
 
