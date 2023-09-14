@@ -8,7 +8,7 @@ DRMS_DATACUBE_PBS_PATH: str = "/nfsscratch/chmurnyd"
 RUN_TT_PIPELINE_PBS_PATH: str = "/nfsscratch/chmurnyd/thesis-work/"
 RUN_TT_PIPELINE_WD: str = "/nfsscratch/chmurnyd/travel-times/torque/"
 
-SLEEP_TIME_AFTER_FIRST_REQUEST: int = 900 # in seconds - for 1 day request 900 s (15 min) is optimal --> other request types can be scaled accordingly
+SLEEP_TIME_AFTER_FIRST_REQUEST: int = 300 # in seconds - for 1 day request 900 s (15 min) is optimal --> other request types can be scaled accordingly
 
 #! Not used now - replaced by bash function
 # TODO: Utilize or delete.
