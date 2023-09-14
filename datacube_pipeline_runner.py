@@ -6,7 +6,7 @@ import time
 DRMS_DATACUBE_PBS_PATH: str = "/nfsscratch/chmurnyd"
 # PIPELINE_DEPENDENCIES_SH_PATH: str = "pipeline_dependencies.sh"
 RUN_TT_PIPELINE_PBS_PATH: str = "/nfsscratch/chmurnyd/thesis-work/"
-RUN_TT_PIPELINE_WD: str = "/nfsscratch/chmurnyd/travel-times/torque"
+RUN_TT_PIPELINE_WD: str = "/nfsscratch/chmurnyd/travel-times/torque/"
 
 SLEEP_TIME_AFTER_FIRST_REQUEST: int = 900 # in seconds - for 1 day request 900 s (15 min) is optimal --> other request types can be scaled accordingly
 
