@@ -159,7 +159,7 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                         is_query_changed = True
                         
                     if line.startswith("p.outdir"):
-                        conf_file_lines[i] = f"p.outdir='{travel_time_outdir_path}';"
+                        conf_file_lines[i] = f"p.outdir='./{travel_time_outdir}/';"
                         is_outdir_changed = True
                         
                     if is_query_changed and is_outdir_changed:
