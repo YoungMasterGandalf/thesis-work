@@ -17,7 +17,6 @@ LOWER_VELOCITY_LIMIT: float = -300.
 UPPER_VELOCITY_LIMIT: float = 300.
 VELOCITY_SAMPLE_COUNT: int = 3
 OUTPUT_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/Datacubes"
-#OUTPUT_ROOT_FOLDER: str = "/Users/daniel/Downloads/Datacubes"
 
 ### AUTOMATED PART SETTINGS END ###
 
@@ -32,7 +31,6 @@ R_SUN: float = 696.0
 JSOC_EMAIL: str = "daniel123chmurny@gmail.com"
 
 TRAVEL_TIMES_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/travel-times"
-#TRAVEL_TIMES_ROOT_FOLDER: str = "/Users/daniel/Downloads/travel_times"
 PARAM_EXAMPLE_CONF_PATH: str = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, "PARAM-EXAMPLE.conf")
 
 ### STATIC CONF SETTINGS END ###
@@ -103,7 +101,6 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
         
         for j, origin in enumerate(origins):
             for k, velocity in enumerate(velocities):
-                print(f'Request {i}: "{request}"')
                 print(f'Origin {j}: {origin}')
                 print(f'Velocity {k}: {velocity}')
                 
@@ -113,15 +110,11 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                 os.makedirs(datacube_dir_path)
                 
                 drms_temp_path = os.path.join(datacube_dir_path, "drms_temp_files")
-                #print(f'Creating drms files directory: "{drms_temp_path}"...')
-                #os.makedirs(drms_temp_path)
                 
                 logs_path = os.path.join(datacube_dir_path, "logs")
                 print(f'Creating logs directory: "{logs_path}"...')
                 os.makedirs(logs_path)
-                logs_path = logs_path.replace("/nfsscratch/chmurnyd/", "") # just a hotfix --> get rid of this ASAP
-                
-                # travel_times_dir_path = 
+                logs_path = logs_path.replace("/nfsscratch/chmurnyd/", "") # TODO: just a hotfix --> get rid of this ASAP
                 
                 with open("datacube_maker/conf.json", "r") as file:
                     conf_dict = json.load(file)
