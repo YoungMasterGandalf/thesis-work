@@ -93,7 +93,9 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
     # for i, request in enumerate(DRMS_REQUESTS):
     for request, data_path in DRMS_REQUESTS.items():
         if data_path is None:
-            data_path = os.path.join(OUTPUT_ROOT_FOLDER, request)
+            request_name = create_request_name_from_request_string(request=request)
+            data_folder_name = f'{request_name}_data'
+            data_path = os.path.join(OUTPUT_ROOT_FOLDER, data_folder_name)
             print(f'Creating data directory for request {request}:\n"{data_path}"...')
             os.makedirs(data_path)
             
