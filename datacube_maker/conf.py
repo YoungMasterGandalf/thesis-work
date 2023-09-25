@@ -23,9 +23,5 @@ class Configuration:
    artificial_lon_velocity: Union[float, None] = None
    output_dir: Union[str, None] = None
    filename: Union[str, None] = None
-   run_via_drms: bool = True
    jsoc_email: str = "daniel123chmurny@gmail.com"
-   doppl_request: str = "hmi.v_45s[2011.01.11_00:00:00_TAI/1h]{Dopplergram}"
-   drms_files_path: Union[str, None] = None
-   delete_files_when_finished: bool = True
 

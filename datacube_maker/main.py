@@ -56,10 +56,6 @@ if __name__ == "__main__":
 
 	config = set_up_configuration_from_json_conf_file(conf_file_path)
 
-	# Sanity check --> test mode can be run only locally
-	if config.test_mode or config.run_via_drms:
-		assert config.test_mode != config.run_via_drms, "Test Mode can be used only locally --> TEST_MODE and RUN_VIA_DRMS can't be both set to True"
-
 	if config.test_mode:
 		file = config.file_path
 
@@ -68,29 +64,8 @@ if __name__ == "__main__":
 		data = dg.get_postel_projected_data()
 	else:
 		start = datetime.datetime.now()
-		if config.run_via_drms:
-
-			dh = DrmsHandler(jsoc_email=config.jsoc_email)
-			dh.create_new_jsoc_export_request(request=config.doppl_request)
-			rec_times_list, missing_rec_times_list = dh.check_for_missing_frames_in_request(time_step=config.time_step)
-
-			rec_times_file_name = f"{config.filename}_rec_times.txt"
-			missing_rec_times_file_name = f"{config.filename}_missing_frames_rec_times.txt"
-			save_list_to_text_file(rec_times_list, config.output_dir, rec_times_file_name)
-			if missing_rec_times_list:
-				save_list_to_text_file(missing_rec_times_list, config.output_dir, missing_rec_times_file_name)
-				missing_frames_message = '\033[91m These frames are missing:\n \033[0m' + "\n".join(missing_rec_times_list)
-				print(missing_frames_message)
-
-			dh.download_fits_files_from_jsoc(files_path=config.drms_files_path)
-
-			datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
-							 config.artificial_lon_velocity, config.test_mode, config.drms_files_path, config.time_step)
-			if config.delete_files_when_finished:
-				shutil.rmtree(config.drms_files_path) # Delete fits files downloaded from JSOC, equivalent to '$ rm -rf <out_dir>'
-		else:
-			datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
-							 config.artificial_lon_velocity, config.test_mode, config.folder_path, config.time_step)
+		datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
+							config.artificial_lon_velocity, config.test_mode, config.folder_path, config.time_step)
 		print("TOTAL RUNTIME ", datetime.datetime.now() - start) 
 
 		# TODO: There should be a default name, e.g. hmi.v_45s_2022.11.01_TAI depending on what set of dopplergrams we calculated with

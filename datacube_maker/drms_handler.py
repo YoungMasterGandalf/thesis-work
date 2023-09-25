@@ -6,6 +6,24 @@ import pandas as pd
 from urllib.request import urlretrieve
 from urllib.error import HTTPError, URLError
 
+from utils.utils import save_list_to_text_file
+
+def download_data_from_jsoc_via_drms(jsoc_email: str, request: str, output_dir: str, time_step: float = 45.0):
+    dh = DrmsHandler(jsoc_email=jsoc_email)
+    dh.create_new_jsoc_export_request(request=request)
+    rec_times_list, missing_rec_times_list = dh.check_for_missing_frames_in_request(time_step=time_step)
+
+    frame_info_files_path = os.path.join(output_dir, "frame_info_files")
+    rec_times_file_name = f"{request}_rec_times.txt"
+    missing_rec_times_file_name = f"{request}_missing_frames_rec_times.txt"
+    save_list_to_text_file(rec_times_list, frame_info_files_path, rec_times_file_name)
+    if missing_rec_times_list:
+        save_list_to_text_file(missing_rec_times_list, frame_info_files_path, missing_rec_times_file_name)
+        missing_frames_message = '\033[91m These frames are missing:\n \033[0m' + "\n".join(missing_rec_times_list)
+        print(missing_frames_message)
+
+    dh.download_fits_files_from_jsoc(files_path=output_dir)
+
 class DrmsHandler:
     def __init__(self, jsoc_email:str):
         self.jsoc_email = jsoc_email

@@ -7,13 +7,9 @@
     "time_step": 45.0,
     "scale": [0.12, 0.12],
     "r_sun": 696.0,
-    "artificial_lon_velocity": 0.0,
-    "output_dir": "/nfsscratch/michal/DRMS/",
-    "filename": "cube1.fits",
-    "run_via_drms": true,
-    "jsoc_email": "daniel123chmurny@gmail.com",
-    "doppl_request": "hmi.v_45s[2011.01.11_00:00:00_TAI/1h]{Dopplergram}",
-    "drms_files_path": "/nfsscratch/michal/DRMS/drms_temp_files",
-    "delete_files_when_finished": true
+    "artificial_lon_velocity": 145.0,
+    "output_dir": "/Users/daniel/Downloads",
+    "filename": "test_cube_nans.fits",
+    "jsoc_email": "daniel123chmurny@gmail.com"
 }
 
