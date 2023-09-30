@@ -2,7 +2,7 @@
 
 ![Version](https://img.shields.io/badge/version-v1.0-blue)
 
-<img src="https://github.com/YoungMasterGandalf/thesis-work/blob/main/sunny.png" alt="Sunny" width="100"/>
+![sunny|300x300](./sunny.png)
 
 I will add some smart comment here eventually... 🤓
 
