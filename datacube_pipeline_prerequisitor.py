@@ -156,7 +156,7 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
                 update_datacube_path_and_traveltime_outdir_in_new_travel_time_conf(new_travel_time_conf_path, datacube_path, travel_time_outdir)
                     
                 datacube_maker_input = {
-                    "working_dir": os.path.join(os.getcwd(), "datacube_maker"),
+                    "working_dir": os.path.abspath("datacube_maker"),
                     "log_dir": logs_path,
                     "conf_file": conf_file_path,
                     "TT_conf_file": traveltime_conf_file_name
