@@ -128,7 +128,6 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
     datacube_maker_inputs: list[dict] = []
     request_output_dir_dict: dict[str, str] = {}
 
-    # for i, request in enumerate(DRMS_REQUESTS):
     for request, data_path in DRMS_REQUESTS.items():
         if data_path is None:
             data_path = create_data_directory_from_request(output_root_folder=OUTPUT_ROOT_FOLDER, request=request)
