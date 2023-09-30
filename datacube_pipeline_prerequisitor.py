@@ -39,10 +39,19 @@ PARAM_EXAMPLE_CONF_PATH: str = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, "PARAM-EXA
 
 REQUESTS_FILE_PATH = "/nfshome/chmurnyd/GitHub/thesis-work/datacube_pipeline_helper_files/requests_ready_for_download.json"
 
-def create_data_directory_from_request(request: str) -> str:
+def create_data_directory_from_request(output_root_folder: str, request: str) -> str:
+    """Creates a directory for data from a JSOC request in a specified root folder with a name based on this request query.
+
+    Args:
+        output_root_folder (str): Folder (path) in which the data firectory will be created.
+        request (str): JSOC query string, e.g. "hmi.v_45s[2011.01.11_00:00:00_TAI/1d]{Dopplergram}"
+
+    Returns:
+        str: A PATH to the newly created data folder.
+    """    
     request_name = create_request_name_from_request_string(request=request)
     data_folder_name = f'{request_name}_data'
-    data_path = os.path.join(OUTPUT_ROOT_FOLDER, data_folder_name)
+    data_path = os.path.join(output_root_folder, data_folder_name)
     print(f'Creating data directory for request {request}:\n"{data_path}"...')
     os.makedirs(data_path)
     
@@ -122,7 +131,7 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
     # for i, request in enumerate(DRMS_REQUESTS):
     for request, data_path in DRMS_REQUESTS.items():
         if data_path is None:
-            data_path = create_data_directory_from_request(request=request)
+            data_path = create_data_directory_from_request(output_root_folder=OUTPUT_ROOT_FOLDER, request=request)
             
             request_output_dir_dict[request] = data_path
         
