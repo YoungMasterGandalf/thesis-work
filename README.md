@@ -2,7 +2,7 @@
 
 ![Version](https://img.shields.io/badge/version-v1.0-blue)
 
-<img src="sunny.jpg" alt="Sunny" width="50"/>
+<img src="sunny.jpg" alt="Sunny" width="100"/>
 
 I will add some smart comment here eventually... 🤓
 
