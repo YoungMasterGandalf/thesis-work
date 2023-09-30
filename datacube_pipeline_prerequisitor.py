@@ -37,7 +37,7 @@ PARAM_EXAMPLE_CONF_PATH: str = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, "PARAM-EXA
 
 ### STATIC CONF SETTINGS END ###
 
-REQUESTS_FILE_PATH = "./datacube_pipeline_helper_files/requests_ready_for_download.json"
+REQUESTS_FILE_PATH = "/nfshome/chmurnyd/GitHub/thesis-work/datacube_pipeline_helper_files/requests_ready_for_download.json"
 
 def create_folder_structure(origins:list[list[float]], velocities:list[float]):
     datacube_maker_inputs: list[dict] = []
