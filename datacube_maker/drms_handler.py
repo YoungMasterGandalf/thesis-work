@@ -6,7 +6,7 @@ import pandas as pd
 from urllib.request import urlretrieve
 from urllib.error import HTTPError, URLError
 
-from utils.utils import save_list_to_text_file, create_request_name_from_request_string
+from utils import save_list_to_text_file, create_request_name_from_request_string
 
 def download_data_from_jsoc_via_drms(jsoc_email: str, request: str, output_dir: str, time_step: float = 45.0):
     dh = DrmsHandler(jsoc_email=jsoc_email)

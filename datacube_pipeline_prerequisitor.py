@@ -6,7 +6,7 @@ import itertools
 
 from typing import Optional
 
-from utils.utils import create_request_name_from_request_string, create_datacube_directory_name
+from datacube_maker.utils import create_request_name_from_request_string, create_datacube_directory_name
 
 ### AUTOMATED PART SETTINGS ###
 
