@@ -1,14 +1,11 @@
 import os
 import json
 import subprocess
-import time
 
 DRMS_DATACUBE_PBS_PATH: str = "/nfsscratch/chmurnyd"
 # PIPELINE_DEPENDENCIES_SH_PATH: str = "pipeline_dependencies.sh"
 RUN_TT_PIPELINE_PBS_PATH: str = "/nfsscratch/chmurnyd/thesis-work/"
 RUN_TT_PIPELINE_WD: str = "/nfsscratch/chmurnyd/travel-times/torque/"
-
-SLEEP_TIME_AFTER_FIRST_REQUEST: int = 300 # in seconds - for 1 day request 900 s (15 min) is optimal --> other request types can be scaled accordingly
 
 #! Not used now - replaced by bash function
 # TODO: Utilize or delete.
@@ -60,8 +57,3 @@ if __name__ == "__main__":
         #run_traveltime_pipeline_job_on_datacube(datacube_job_id, tt_conf_file)
 
         run_drms_and_tt_via_bash(working_dir, log_dir, conf_file, RUN_TT_PIPELINE_WD, tt_conf_file)
-
-        if i == 0:
-            time.sleep(SLEEP_TIME_AFTER_FIRST_REQUEST)
-        else:
-            time.sleep(3) # wait before sending another request - so as not to get blocked by JSOC
