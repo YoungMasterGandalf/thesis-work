@@ -1,0 +1,34 @@
+#!/bin/bash
+
+
+###############################################################
+# PBS part
+###############################################################
+
+# Assigns a job name
+#PBS -N download_jsoc_queries
+
+# Assigns the queue
+#PBS -q eternity
+
+#Join option  
+#PBS -j oe
+#PBS -M daniel123chmurny@gmail.com
+
+# Sends mail to the user when the job begins, ends, aborts.
+#PBS -m bea
+
+#PBS -V
+
+#. ~/.bashrc
+
+##############################################################
+# Execution
+##############################################################
+
+export LC_ALL=POSIX
+echo "Running hook ..."
+eval "$(/software/anaconda3/bin/conda shell.bash hook)"
+echo "Activating conda environment ..." 
+
+python download_selected_queries.py 
