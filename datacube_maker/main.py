@@ -1,4 +1,3 @@
-import datetime
 import os
 import shutil
 import argparse
@@ -63,10 +62,8 @@ if __name__ == "__main__":
                    artificial_lon_velocity=config.artificial_lon_velocity, test_mode=config.test_mode, file_path=file)
 		data = dg.get_postel_projected_data()
 	else:
-		start = datetime.datetime.now()
 		datacube_array = create_datacube_from_files_in_folder(config.origin, config.shape, config.scale, config.r_sun, 
 							config.artificial_lon_velocity, config.test_mode, config.folder_path, config.time_step)
-		print("TOTAL RUNTIME ", datetime.datetime.now() - start) 
 
 		# TODO: There should be a default name, e.g. hmi.v_45s_2022.11.01_TAI depending on what set of dopplergrams we calculated with
 		create_fits_file_from_data_array(datacube_array, config.origin, config.scale, config.time_step, config.r_sun, 

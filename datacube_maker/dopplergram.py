@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import scipy.linalg
-import datetime
 
 import astropy.units as u
 from astropy.coordinates import SkyCoord
@@ -170,23 +169,18 @@ def create_datacube_from_files_in_folder(origin: list[float], shape: list[int], 
 
 	datacube_array = np.zeros(shape=(file_count, shape[0], shape[1]))
 
-	start1 = datetime.datetime.now()
 	for i, file_path in enumerate(files):
 		
 		index_relative_to_base = i - base_index
 		time_delta_relative_to_base = index_relative_to_base*time_step
 		
-		start = datetime.datetime.now()
 		dg = Dopplergram(origin, shape, time_step, scale, r_sun, artificial_lon_velocity, test_mode, file_path, 
 		   time_delta_relative_to_base=time_delta_relative_to_base)
 		data = dg.get_postel_projected_data()
-		print(f"PROJECTION {i} RUNTIME ", datetime.datetime.now() - start)
   
 		data = fill_nan_values_with_median(data)
 
-		start = datetime.datetime.now()
 		data = subtract_quadratic_surface_from_data(data)
-		print(f"Subtract quadr. surf. {i} runtime: ", datetime.datetime.now() - start)
 
 		datacube_array[i] = data
 		
@@ -195,8 +189,6 @@ def create_datacube_from_files_in_folder(origin: list[float], shape: list[int], 
 
 		if i == file_count - 1:
 			hi.header_dict["T_REC_LA"] = [dg.smap.date.value, "Observation time of the last image"]
-		
-	print("FOR LOOP RUNTIME ", datetime.datetime.now() - start1)
 
 	return datacube_array
 
