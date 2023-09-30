@@ -6,7 +6,7 @@ import pandas as pd
 from urllib.request import urlretrieve
 from urllib.error import HTTPError, URLError
 
-from utils.utils import save_list_to_text_file
+from utils.utils import save_list_to_text_file, create_request_name_from_request_string
 
 def download_data_from_jsoc_via_drms(jsoc_email: str, request: str, output_dir: str, time_step: float = 45.0):
     dh = DrmsHandler(jsoc_email=jsoc_email)
@@ -14,8 +14,9 @@ def download_data_from_jsoc_via_drms(jsoc_email: str, request: str, output_dir: 
     rec_times_list, missing_rec_times_list = dh.check_for_missing_frames_in_request(time_step=time_step)
 
     frame_info_files_path = os.path.join(output_dir, "frame_info_files")
-    rec_times_file_name = f"{request}_rec_times.txt"
-    missing_rec_times_file_name = f"{request}_missing_frames_rec_times.txt"
+    request_name = create_request_name_from_request_string(request=request)
+    rec_times_file_name = f"{request_name}_rec_times.txt"
+    missing_rec_times_file_name = f"{request_name}_missing_frames_rec_times.txt"
     save_list_to_text_file(rec_times_list, frame_info_files_path, rec_times_file_name)
     if missing_rec_times_list:
         save_list_to_text_file(missing_rec_times_list, frame_info_files_path, missing_rec_times_file_name)
