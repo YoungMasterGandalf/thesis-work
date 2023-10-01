@@ -43,7 +43,7 @@ def create_data_directory_from_request(output_root_folder: str, request: str) ->
     """Creates a directory for data from a JSOC request in a specified root folder with a name based on this request query.
 
     Args:
-        output_root_folder (str): Folder (path) in which the data firectory will be created.
+        output_root_folder (str): Folder (path) in which the data directory will be created.
         request (str): JSOC query string, e.g. "hmi.v_45s[2011.01.11_00:00:00_TAI/1d]{Dopplergram}"
 
     Returns:
