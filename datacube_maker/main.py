@@ -4,16 +4,6 @@ import json
 
 import conf
 from dopplergram import Dopplergram, create_datacube_from_files_in_folder, create_fits_file_from_data_array
-
-def save_list_to_text_file(list_var:list, dir_path, filename):
-	
-	# Create the file directory if non-existent
-	if not os.path.isdir(dir_path):
-		os.makedirs(dir_path)
-
-	with open(os.path.join(dir_path, filename), "w") as file:
-		for element in list_var:
-			file.write(f'{element}\n')
    
 def set_up_configuration_from_json_conf_file(conf_file_path: str) -> conf.Configuration:
 	"""Store the path to conf .json into a Configuration dataclass so it can be achieved from anywhere.
