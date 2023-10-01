@@ -5,7 +5,6 @@ All configuration changes should be done in conf.json only!
 This file serves mainly as a storage for comments of various parameters (might be deprecated in the future).
 """
 
-import json
 from dataclasses import dataclass
 from typing import Union
 

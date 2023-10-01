@@ -1,11 +1,9 @@
 import os
-import shutil
 import argparse
 import json
 
 import conf
 from dopplergram import Dopplergram, create_datacube_from_files_in_folder, create_fits_file_from_data_array
-from drms_handler import DrmsHandler
 
 def save_list_to_text_file(list_var:list, dir_path, filename):
 	
@@ -35,7 +33,6 @@ def set_up_configuration_from_json_conf_file(conf_file_path: str) -> conf.Config
 	with open(conf_file_path, 'r') as file:
 		conf_dict = json.load(file)
      
-	# conf.conf = conf.Configuration(conf_file_path, **conf_dict)
 	conf.conf = conf.Configuration(**conf_dict)
  
 	return conf.conf

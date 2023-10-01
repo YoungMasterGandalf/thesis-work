@@ -1,6 +1,5 @@
 import os
 import json
-import subprocess
 
 DRMS_DATACUBE_PBS_PATH: str = "/nfsscratch/chmurnyd"
 RUN_TT_PIPELINE_PBS_PATH: str = "/nfsscratch/chmurnyd/thesis-work/"
