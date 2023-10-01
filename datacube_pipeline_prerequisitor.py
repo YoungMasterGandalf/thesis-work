@@ -76,8 +76,10 @@ def create_datacube_directory(output_root_folder: str, request: str, origin: lis
         tuple[str, str]: Datacube directory name and absolute path of this directory
     """    
     datacube_dir_name = create_datacube_directory_name(request, origin, velocity)
-    datacube_dir_path = os.path.join(OUTPUT_ROOT_FOLDER, datacube_dir_name)                
+    datacube_dir_path = os.path.join(output_root_folder, datacube_dir_name) 
+                   
     module_logger.info(f'Creating datacube directory: "{datacube_dir_path}"...')
+    
     os.makedirs(datacube_dir_path)
     
     return datacube_dir_name, datacube_dir_path
@@ -96,7 +98,7 @@ def copy_and_fill_in_conf_json(datacube_dir_path: str, data_path: str, origin: l
         conf_dict = json.load(file)
         
     conf_dict["folder_path"] = data_path
-    conf_dict["test_mode"] = TEST_MODE
+    conf_dict["test_mode"] = False # hard-set to False as test mode is for single frame plotting only (it's use doesn't make sense in pipeline)
     conf_dict["origin"] = origin
     conf_dict["shape"] = SHAPE
     conf_dict["time_step"] = TIME_STEP
