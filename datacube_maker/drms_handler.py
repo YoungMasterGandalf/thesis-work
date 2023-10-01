@@ -7,6 +7,9 @@ from urllib.request import urlretrieve
 from urllib.error import HTTPError, URLError
 
 from utils import save_list_to_text_file, create_request_name_from_request_string
+from log import setup_logger
+
+module_logger = setup_logger(__name__)
 
 def download_data_from_jsoc_via_drms(jsoc_email: str, request: str, output_dir: str, time_step: float = 45.0):
     dh = DrmsHandler(jsoc_email=jsoc_email)
@@ -20,8 +23,9 @@ def download_data_from_jsoc_via_drms(jsoc_email: str, request: str, output_dir: 
     save_list_to_text_file(rec_times_list, frame_info_files_path, rec_times_file_name)
     if missing_rec_times_list:
         save_list_to_text_file(missing_rec_times_list, frame_info_files_path, missing_rec_times_file_name)
-        missing_frames_message = '\033[91m These frames are missing:\n \033[0m' + "\n".join(missing_rec_times_list)
-        print(missing_frames_message)
+        # missing_frames_message = '\033[91m These frames are missing:\n \033[0m' + "\n".join(missing_rec_times_list)
+        missing_frames_message = 'These frames are missing:\n' + "\n".join(missing_rec_times_list)
+        module_logger.warning(missing_frames_message)
 
     dh.download_fits_files_from_jsoc(files_path=output_dir)
 
@@ -84,7 +88,7 @@ class DrmsHandler:
             todays_date = str(datetime.datetime.now().date())
             files_path = f'{files_path}_{todays_date}'
             os.makedirs(files_path)
-            print(f"Files folder already exists, new folder created in path: '{files_path}'")
+            module_logger.warning(f"Files folder already exists, new folder created in path: '{files_path}'")
 
         #! Deprecated for own custom solution - drms solution does not support retry of download when it fails
         # self.export_request.download(files_path)
@@ -110,25 +114,27 @@ class DrmsHandler:
             
             while (not is_download_complete) and (download_attempt_index < download_attempts_limit):
                 if verbose:
-                    print(f"Downloading file {int(i + 1)} (try no. {download_attempt_index}) of {int(ndata)}...")
-                    print(f"    record: {di.record}")
-                    print(f"  filename: {di.filename}")
+                    module_logger.info(f"Downloading file {int(i + 1)} (try no. {download_attempt_index}) of {int(ndata)}...")
+                    module_logger.info(f"    record: {di.record}")
+                    module_logger.info(f"  filename: {di.filename}")
                 try:
                     urlretrieve(di.url, fpath_tmp)
                 except (HTTPError, URLError):
-                    print(f'Download {download_attempt_index} failed.')
+                    module_logger.error(f'Download {download_attempt_index} failed.')
                     download_attempt_index += 1
                 else:
                     fpath_new = self._next_available_filename(fpath)
                     os.rename(fpath_tmp, fpath_new)
                     if verbose:
-                        print(f"  -> {os.path.relpath(fpath_new)}")
+                        module_logger.info(f"  -> {os.path.relpath(fpath_new)}")
                     is_download_complete = True
                 
             if is_download_complete:
                 downloads.append(fpath)
             else:
-                raise RuntimeError("File missing, download aborted.")
+                runtime_error_message = "File missing, download aborted."
+                module_logger.critical(runtime_error_message)
+                raise RuntimeError(runtime_error_message)
 
         result = data[["record", "url"]].copy()
         result["download"] = downloads
