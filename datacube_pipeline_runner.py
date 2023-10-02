@@ -21,11 +21,12 @@ if __name__ == "__main__":
         maker_inputs = json.load(file)
         
     for i, maker_input in enumerate(maker_inputs):
-        print(f'Processing input no. {i}, WD: {working_dir}, LD: {log_dir}')
         working_dir = maker_input["working_dir"]
         log_dir = maker_input["log_dir"]
         conf_file = maker_input["conf_file"]
         
         tt_conf_file = maker_input["TT_conf_file"]
+        
+        print(f'Processing input no. {i}, WD: {working_dir}, LD: {log_dir}')
 
         run_drms_and_tt_via_bash(working_dir, log_dir, conf_file, RUN_TT_PIPELINE_WD, tt_conf_file)
