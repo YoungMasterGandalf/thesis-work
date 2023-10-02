@@ -4,18 +4,18 @@ import json
 import numpy as np
 import itertools
 
-from typing import Optional
-
 from datacube_maker.utils import create_request_name_from_request_string, create_datacube_directory_name
 # from log import setup_logger TODO: Fix and reintroduce logger
 
 ### AUTOMATED PART SETTINGS ###
 
-DRMS_REQUESTS: dict[str, Optional[str]] = {
-    "hmi.v_45s[2011.01.11_00:00:00_TAI/1d]{Dopplergram}": None
+DRMS_REQUESTS: dict[str, dict] = {
+    "hmi.v_45s[2011.01.11_00:00:00_TAI/1d]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [70., 100.]
+    }
 }
 LATITUDES: list[float] = [-20., 20.]
-LONGITUDES: list[float] = [70., 100.]
 LOWER_VELOCITY_LIMIT: float = -300.
 UPPER_VELOCITY_LIMIT: float = 300.
 VELOCITY_SAMPLE_COUNT: int = 3
@@ -94,12 +94,13 @@ def create_datacube_logs_directory(datacube_dir_path: str) -> str:
     
     return logs_path
 
-def copy_and_fill_in_conf_json(datacube_dir_path: str, data_path: str, origin: list[float], velocity: float, datacube_dir_name: str) -> str:
+def copy_and_fill_in_conf_json(datacube_dir_path: str, data_path: str, origin: list[float], velocity: float, 
+                               datacube_dir_name: str) -> str:
     with open("datacube_maker/conf.json", "r") as file:
         conf_dict = json.load(file)
         
     conf_dict["folder_path"] = data_path
-    conf_dict["test_mode"] = False # hard-set to False as test mode is for single frame plotting only (it's use doesn't make sense in pipeline)
+    conf_dict["test_mode"] = False # hard-set to False as test mode is for single frame plotting only
     conf_dict["origin"] = origin
     conf_dict["shape"] = SHAPE
     conf_dict["time_step"] = TIME_STEP
@@ -118,17 +119,18 @@ def copy_and_fill_in_conf_json(datacube_dir_path: str, data_path: str, origin: l
         
     return conf_file_path
         
-def copy_traveltime_conf_file_to_new_path(traveltime_conf_file_name: str) -> str:
-    new_travel_time_conf_path = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, traveltime_conf_file_name)
+def copy_traveltime_conf_file_to_new_path(travel_times_root_folder: str, traveltime_conf_file_name: str, 
+                                          param_example_conf_path: str) -> str:
+    new_travel_time_conf_path = os.path.join(travel_times_root_folder, traveltime_conf_file_name)
     
     print(f'New TT conf file path: {new_travel_time_conf_path}')
     
-    shutil.copyfile(PARAM_EXAMPLE_CONF_PATH, new_travel_time_conf_path)
+    shutil.copyfile(param_example_conf_path, new_travel_time_conf_path)
     
     return new_travel_time_conf_path
 
-def update_datacube_path_and_traveltime_outdir_in_new_travel_time_conf(new_travel_time_conf_path: str, datacube_path: str,
-                                                                       travel_time_outdir: str):
+def update_datacube_path_and_traveltime_outdir_in_new_travel_time_conf(new_travel_time_conf_path: str, 
+                                                                       datacube_path: str, travel_time_outdir: str):
     with open(new_travel_time_conf_path, 'r') as file:
         conf_file_lines = file.readlines()
         
@@ -150,35 +152,54 @@ def update_datacube_path_and_traveltime_outdir_in_new_travel_time_conf(new_trave
         text = "\n".join(conf_file_lines)
         file.write(text)
 
-def create_folder_structure(origins:list[list[float]], velocities:list[float]):
+def create_folder_structure(drms_requests: dict[str, dict], velocities:list[float], latitudes: list[float], 
+                            output_root_folder: str, travel_times_root_folder: str):
     datacube_maker_inputs: list[dict] = []
     request_output_dir_dict: dict[str, str] = {}
 
-    for request, data_path in DRMS_REQUESTS.items():
+    for request, request_dict in drms_requests.items():
+        if "data_path" not in request_dict or "origin_longitudes" not in request_dict:
+            raise IndexError(f'"data_path" or "origin_longitudes" key is missing in "{request}" request dictionary.')
+        
+        data_path = request_dict["data_path"]
+        origin_longitudes = request_dict["origin_longitudes"]
+        
+        if type(origin_longitudes) != list:
+            message = f'"origin_longitudes" element in the request dictionary must be of type list[float], not {type(origin_longitudes)}.'
+            raise TypeError(message)
+        
         if data_path is None:
-            data_path = create_data_directory_from_request(output_root_folder=OUTPUT_ROOT_FOLDER, request=request)
+            data_path = create_data_directory_from_request(output_root_folder=output_root_folder, request=request)
             
             request_output_dir_dict[request] = data_path
+            
+        origins = list(itertools.product(origin_longitudes, latitudes))
         
         for j, origin in enumerate(origins):
             for k, velocity in enumerate(velocities):
                 print(f'Preparing folder structure for Origin {j}: {origin} and Velocity {k}: {velocity}')
                 
-                datacube_dir_name, datacube_dir_path = create_datacube_directory(output_root_folder=OUTPUT_ROOT_FOLDER, request=request, origin=origin, velocity=velocity)
+                datacube_dir_name, datacube_dir_path = create_datacube_directory(output_root_folder=output_root_folder, 
+                                                                                 request=request, origin=origin, 
+                                                                                 velocity=velocity)
                 
                 logs_path = create_datacube_logs_directory(datacube_dir_path=datacube_dir_path)
                 
-                conf_file_path = copy_and_fill_in_conf_json(datacube_dir_path, data_path, origin, velocity, datacube_dir_name)
+                conf_file_path = copy_and_fill_in_conf_json(datacube_dir_path, data_path, origin, velocity, 
+                                                            datacube_dir_name)
                     
                 traveltime_conf_file_name = f'TT_{datacube_dir_name}.conf'
-                new_travel_time_conf_path = copy_traveltime_conf_file_to_new_path(traveltime_conf_file_name)
+                new_travel_time_conf_path = copy_traveltime_conf_file_to_new_path(TRAVEL_TIMES_ROOT_FOLDER, 
+                                                                                  traveltime_conf_file_name, 
+                                                                                  PARAM_EXAMPLE_CONF_PATH)
                     
                 datacube_path = os.path.join(datacube_dir_path, f'{datacube_dir_name}.fits')
                 travel_time_outdir = f'TT_{datacube_dir_name}'
-                travel_time_outdir_path = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, travel_time_outdir)
+                travel_time_outdir_path = os.path.join(travel_times_root_folder, travel_time_outdir)
                 os.makedirs(travel_time_outdir_path)
                 
-                update_datacube_path_and_traveltime_outdir_in_new_travel_time_conf(new_travel_time_conf_path, datacube_path, travel_time_outdir)
+                update_datacube_path_and_traveltime_outdir_in_new_travel_time_conf(new_travel_time_conf_path, 
+                                                                                   datacube_path, travel_time_outdir)
                     
                 datacube_maker_input = {
                     "working_dir": os.path.abspath("datacube_maker"),
@@ -196,10 +217,9 @@ if __name__ == "__main__":
         print(f'Creating root directory "{OUTPUT_ROOT_FOLDER}"...')
         os.makedirs(OUTPUT_ROOT_FOLDER)
 
-    origins = list(itertools.product(LONGITUDES, LATITUDES))
-    # velocities = np.random.uniform(low=LOWER_VELOCITY_LIMIT, high=UPPER_VELOCITY_LIMIT, size=VELOCITY_SAMPLE_COUNT)
     velocities = np.floor(np.linspace(start=LOWER_VELOCITY_LIMIT, stop=UPPER_VELOCITY_LIMIT, num=VELOCITY_SAMPLE_COUNT))
-    datacube_maker_inputs, request_output_dir_dict = create_folder_structure(origins, velocities)
+    datacube_maker_inputs, request_output_dir_dict = create_folder_structure(DRMS_REQUESTS, velocities, LATITUDES, 
+                                                                             OUTPUT_ROOT_FOLDER, TRAVEL_TIMES_ROOT_FOLDER)
     
     with open(REQUESTS_FILE_PATH, "w") as file:
         json.dump(request_output_dir_dict, file, indent=2)
