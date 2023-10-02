@@ -7,7 +7,7 @@ import itertools
 from typing import Optional
 
 from datacube_maker.utils import create_request_name_from_request_string, create_datacube_directory_name
-from log import setup_logger
+# from log import setup_logger TODO: Fix and reintroduce logger
 
 ### AUTOMATED PART SETTINGS ###
 
@@ -40,7 +40,8 @@ PARAM_EXAMPLE_CONF_PATH: str = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, "PARAM-EXA
 
 REQUESTS_FILE_PATH = "/nfshome/chmurnyd/GitHub/thesis-work/datacube_pipeline_helper_files/requests_ready_for_download.json"
 
-module_logger = setup_logger(__name__)
+# TODO: Fix and reintroduce logger
+# module_logger = setup_logger(__name__)
 
 def create_data_directory_from_request(output_root_folder: str, request: str) -> str:
     """Creates a directory for data from a JSOC request in a specified root folder with a name based on this request query.
@@ -56,7 +57,7 @@ def create_data_directory_from_request(output_root_folder: str, request: str) ->
     data_folder_name = f'{request_name}_data'
     data_path = os.path.join(output_root_folder, data_folder_name)
     
-    module_logger.info(f'Creating data directory for request {request}:\n"{data_path}"...')
+    print(f'Creating data directory for request {request}:\n"{data_path}"...')
     
     os.makedirs(data_path)
     
@@ -78,7 +79,7 @@ def create_datacube_directory(output_root_folder: str, request: str, origin: lis
     datacube_dir_name = create_datacube_directory_name(request, origin, velocity)
     datacube_dir_path = os.path.join(output_root_folder, datacube_dir_name) 
                    
-    module_logger.info(f'Creating datacube directory: "{datacube_dir_path}"...')
+    print(f'Creating datacube directory: "{datacube_dir_path}"...')
     
     os.makedirs(datacube_dir_path)
     
@@ -87,7 +88,7 @@ def create_datacube_directory(output_root_folder: str, request: str, origin: lis
 def create_datacube_logs_directory(datacube_dir_path: str) -> str:
     logs_path = os.path.join(datacube_dir_path, "logs")
     
-    module_logger.info(f'Creating logs directory: "{logs_path}"...')
+    print(f'Creating logs directory: "{logs_path}"...')
     
     os.makedirs(logs_path)
     
@@ -110,7 +111,7 @@ def copy_and_fill_in_conf_json(datacube_dir_path: str, data_path: str, origin: l
     
     conf_file_path = os.path.join(datacube_dir_path, "conf.json")
     
-    module_logger.info(f'Storing configuration into "{conf_file_path}"...')
+    print(f'Storing configuration into "{conf_file_path}"...')
     
     with open(conf_file_path, "w") as file:
         json.dump(conf_dict, file, indent=4)
@@ -120,7 +121,7 @@ def copy_and_fill_in_conf_json(datacube_dir_path: str, data_path: str, origin: l
 def copy_traveltime_conf_file_to_new_path(traveltime_conf_file_name: str) -> str:
     new_travel_time_conf_path = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, traveltime_conf_file_name)
     
-    module_logger.info(f'New TT conf file path: {new_travel_time_conf_path}')
+    print(f'New TT conf file path: {new_travel_time_conf_path}')
     
     shutil.copyfile(PARAM_EXAMPLE_CONF_PATH, new_travel_time_conf_path)
     
@@ -161,7 +162,7 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
         
         for j, origin in enumerate(origins):
             for k, velocity in enumerate(velocities):
-                module_logger.info(f'Preparing folder structure for Origin {j}: {origin} and Velocity {k}: {velocity}')
+                print(f'Preparing folder structure for Origin {j}: {origin} and Velocity {k}: {velocity}')
                 
                 datacube_dir_name, datacube_dir_path = create_datacube_directory(output_root_folder=OUTPUT_ROOT_FOLDER, request=request, origin=origin, velocity=velocity)
                 
@@ -192,7 +193,7 @@ def create_folder_structure(origins:list[list[float]], velocities:list[float]):
 
 if __name__ == "__main__":
     if not os.path.exists(OUTPUT_ROOT_FOLDER):
-        module_logger.info(f'Creating root directory "{OUTPUT_ROOT_FOLDER}"...')
+        print(f'Creating root directory "{OUTPUT_ROOT_FOLDER}"...')
         os.makedirs(OUTPUT_ROOT_FOLDER)
 
     origins = list(itertools.product(LONGITUDES, LATITUDES))

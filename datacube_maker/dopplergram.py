@@ -9,9 +9,11 @@ import sunpy.map
 from sunpy.coordinates import HeliographicCarrington
 
 import header_info as hi
-from log import setup_logger
 
-module_logger = setup_logger(__name__)
+# TODO: Fix and reintroduce logger
+# from log import setup_logger
+
+# module_logger = setup_logger(__name__)
 
 class Dopplergram:
 	def __init__(self, origin: list[float], shape: list[int], time_step: float, scale: list[float], r_sun: float, 
@@ -215,7 +217,7 @@ def create_fits_file_from_data_array(datacube_array: np.array, origin: list[floa
 	hi.header_dict["RSUN_MM"] = [r_sun, "Sun's radius in megameters"]
 	
 
-	module_logger.info(f'Creating a .fits file "{filename}" from a datacube of shape {datacube_array.shape}...')
+	print(f'Creating a .fits file "{filename}" from a datacube of shape {datacube_array.shape}...')
 	hdu = fits.PrimaryHDU(datacube_array)
 	
 	for hdr_key, hdr_value in hi.header_dict.items():
@@ -235,4 +237,4 @@ def create_fits_file_from_data_array(datacube_array: np.array, origin: list[floa
 
 	hdul.writeto(os.path.join(output_dir, filename), overwrite=True)
 
-	module_logger.info(f'Fits file "{filename}" created with a header:\n{hdu.header}')
+	print(f'Fits file "{filename}" created with a header:\n{hdu.header}')
