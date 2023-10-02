@@ -79,10 +79,11 @@ class Dopplergram:
 			self.smap.draw_limb(axes=ax, color='white')
 			ax.plot_coord(origin, 'o', color='red', fillstyle='none', markersize=20)
 
-			bottom_left = SkyCoord((rect_offset_x - self.shape[0]/2*self.scale[0])*u.deg, (rect_offset_y - self.shape[1]/2*self.scale[1])*u.deg,
+			bottom_left = SkyCoord((rect_offset_x - self.shape[0]/2*self.scale[0])*u.deg, 
+                          (rect_offset_y - self.shape[1]/2*self.scale[1])*u.deg,
                        frame=HeliographicCarrington, obstime=self.smap.date, observer=self.smap.observer_coordinate)
-			self.smap.draw_quadrangle(bottom_left, width=self.shape[0]*self.scale[0]*u.deg, height=self.shape[1]*self.scale[1]*u.deg,
-                    edgecolor='green', linewidth=1.5)
+			self.smap.draw_quadrangle(bottom_left, width=self.shape[0]*self.scale[0]*u.deg, 
+                             height=self.shape[1]*self.scale[1]*u.deg, edgecolor='green', linewidth=1.5)
 
 			ax = fig.add_subplot(1, 2, 2, projection=out_map)
 			out_map.plot(axes=ax)
@@ -136,7 +137,8 @@ def subtract_quadratic_surface_from_data(data: np.ndarray):
 	YY = Y.flatten()
 
 	# best-fit quadratic curve
-	A = np.c_[np.ones(transformed_data.shape[0]), transformed_data[:,:2], np.prod(transformed_data[:,:2], axis=1), transformed_data[:,:2]**2]
+	A = np.c_[np.ones(transformed_data.shape[0]), transformed_data[:,:2], np.prod(transformed_data[:,:2], axis=1), 
+           transformed_data[:,:2]**2]
 	solution, residues, rank, sing_vals = scipy.linalg.lstsq(A, transformed_data[:,2])
 	
 	# evaluate it on a grid
@@ -159,8 +161,8 @@ def create_datacube_from_files_in_folder(origin: list[float], shape: list[int], 
 					 artificial_lon_velocity: float, test_mode: bool, folder_path: str, time_step:float=45.0):
 
 	"""
-	Looks into specified path, iterates through all of the present .fits files and returns a 3-D numpy array of shape (x-shape, y-shape, time-shape) containing series 
-	of Postel projected dopplergram data.
+	Looks into specified path, iterates through all of the present .fits files and returns a 3-D numpy array of shape 
+ 	(x-shape, y-shape, time-shape) containing series of Postel projected dopplergram data.
 
 	Arguments:
 	folder_path -- path to the directory containing .fits files for projections
@@ -198,7 +200,7 @@ def create_datacube_from_files_in_folder(origin: list[float], shape: list[int], 
 
 
 def create_fits_file_from_data_array(datacube_array: np.array, origin: list[float], scale: list[float], time_step: float, 
-    r_sun: float, output_dir: str = ".", filename: str = "test.fits"):
+                                     r_sun: float, output_dir: str = ".", filename: str = "test.fits"):
 
 	"""
 	Takes a np.array datacube and parses it into a .fits file. Fits file details are specified in header_info.py

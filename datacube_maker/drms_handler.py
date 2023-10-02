@@ -55,7 +55,8 @@ class DrmsHandler:
         """
         Creates a new export request via JSOC client.
 
-        Needs to be called before any other return methods, i.e. `download_fits_files_from_jsoc` or `check_for_missing_frames_in_request`.
+        Needs to be called before any other return methods, i.e. `download_fits_files_from_jsoc` or 
+        `check_for_missing_frames_in_request`.
 
         Parameters:
             request: str ... JSOC request string - mainly taken from conf.py and passed from main.py
@@ -211,4 +212,5 @@ class DrmsHandler:
         return string
     
     def _assert_export_request_created(self):
-        assert self.export_request is not None, "JSOC export request not created. Call 'create_new_jsoc_export_request' method to create one."
+        message = "JSOC export request not created. Call 'create_new_jsoc_export_request' method to create one."
+        assert self.export_request is not None, message
