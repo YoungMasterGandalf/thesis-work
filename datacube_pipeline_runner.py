@@ -1,5 +1,6 @@
 import os
 import json
+import time
 
 # TODO: Fix and reintroduce logger
 # from log import setup_logger
@@ -30,3 +31,5 @@ if __name__ == "__main__":
         print(f'Processing input no. {i}, WD: {working_dir}, LD: {log_dir}')
 
         run_drms_and_tt_via_bash(working_dir, log_dir, conf_file, RUN_TT_PIPELINE_WD, tt_conf_file)
+
+        time.sleep(0.3) # Wait for a short moment before requests so the cluster keeps up
