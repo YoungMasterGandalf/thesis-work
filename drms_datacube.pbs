@@ -16,8 +16,7 @@
 #PBS -M daniel123chmurny@gmail.com
 
 # Sends mail to the user when the job begins, ends, aborts.
-#PBS -m a
-
+#PBS -m ae
 
 #PBS -V
 PBS_O_WORKDIR=${WD}
@@ -33,7 +32,5 @@ export LC_ALL=POSIX
 echo "Running hook ..."
 eval "$(/software/anaconda3/bin/conda shell.bash hook)"
 echo "Activating conda environment ..." 
-#cp ${CONFFILE} ${WD}/conf.json
-#conda activate py39
 
 python main.py -conf-path="${CONFFILE}" 
