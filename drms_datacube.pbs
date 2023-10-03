@@ -18,8 +18,6 @@
 # Sends mail to the user when the job begins, ends, aborts.
 #PBS -m a
 
-#PBS -o ${LD}/datacube_${PBS_JOBID}.out
-#PBS -e ${LD}/datacube_${PBS_JOBID}.err
 
 #PBS -V
 PBS_O_WORKDIR=${WD}
