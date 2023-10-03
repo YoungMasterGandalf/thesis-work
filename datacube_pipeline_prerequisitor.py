@@ -10,15 +10,51 @@ from datacube_maker.utils import create_request_name_from_request_string, create
 ### AUTOMATED PART SETTINGS ###
 
 DRMS_REQUESTS: dict[str, dict] = {
-    "hmi.v_45s[2011.01.11_00:00:00_TAI/1d]{Dopplergram}": {
+    "hmi.v_45s[2018.03.26_00:00:00_TAI-2018.03.27_00:00:00_TAI]{Dopplergram}": {
         "data_path": None,
-        "origin_longitudes": [70., 100.]
+        "origin_longitudes": [310.]
+    },
+    "hmi.v_45s[2018.11.09_00:00:00_TAI-2018.11.10_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [190.]
+    },
+    "hmi.v_45s[2019.02.25_00:00:00_TAI-2019.02.26_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [210.]
+    },
+    "hmi.v_45s[2019.08.28_00:00:00_TAI-2019.08.29_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [290.]
+    },
+    "hmi.v_45s[2019.09.11_00:00:00_TAI-2019.09.12_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [100.]
+    },
+    "hmi.v_45s[2019.12.19_00:00:00_TAI-2019.12.20_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [70.]
+    },
+    "hmi.v_45s[2020.01.16_00:00:00_TAI-2020.01.17_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [230.]
+    },
+    "hmi.v_45s[2020.02.12_00:00:00_TAI-2020.02.13_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [230.]
+    },
+    "hmi.v_45s[2020.04.13_00:00:00_TAI-2020.04.14_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [160.]
+    },
+    "hmi.v_45s[2020.05.10_00:00:00_TAI-2020.05.11_00:00:00_TAI]{Dopplergram}": {
+        "data_path": None,
+        "origin_longitudes": [160.]
     }
 }
-LATITUDES: list[float] = [-20., 20.]
-LOWER_VELOCITY_LIMIT: float = -300.
-UPPER_VELOCITY_LIMIT: float = 300.
-VELOCITY_SAMPLE_COUNT: int = 3
+LATITUDES: list[float] = [0.0]
+LOWER_VELOCITY_LIMIT: float = -500.
+UPPER_VELOCITY_LIMIT: float = 500.
+VELOCITY_SAMPLE_COUNT: int = 10
 OUTPUT_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/Datacubes"
 
 ### AUTOMATED PART SETTINGS END ###
