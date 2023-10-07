@@ -45,5 +45,5 @@ if __name__ == "__main__":
         file.write("\n".join(complete_data_queries))
      
     with open("./incomplete_data_queries.json", "w") as file:
-        json.dump(incomplete_data_queries, file)    
+        json.dump(incomplete_data_queries, file, indent=2)    
         
