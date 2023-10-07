@@ -19,12 +19,14 @@
 #PBS -m bea
 
 #PBS -V
+PBS_O_WORKDIR=${WD}
 
 #. ~/.bashrc
 
 ##############################################################
 # Execution
 ##############################################################
+cd $PBS_O_WORKDIR
 
 export LC_ALL=POSIX
 echo "Running hook ..."
