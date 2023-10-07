@@ -6,7 +6,7 @@ import pandas as pd
 from urllib.request import urlretrieve
 from urllib.error import HTTPError, URLError
 
-from utils import save_list_to_text_file, create_request_name_from_request_string
+from .utils import save_list_to_text_file, create_request_name_from_request_string
 
 # TODO: Fix and reintroduce logger
 # from log import setup_logger
