@@ -9,6 +9,8 @@ DRMS_DATACUBE_PBS_PATH: str = "/nfsscratch/chmurnyd"
 RUN_TT_PIPELINE_PBS_PATH: str = "/nfsscratch/chmurnyd/thesis-work/"
 RUN_TT_PIPELINE_WD: str = "/nfsscratch/chmurnyd/travel-times/torque/"
 
+WAIT_TIME_BETWEEN_JOBS = 3 # Set at least to 2 seconds so as to avoid duplication in job ids (temstamps)
+
 # TODO: Fix and reintroduce logger
 # module_logger = setup_logger(__name__)
 
@@ -32,4 +34,4 @@ if __name__ == "__main__":
 
         run_drms_and_tt_via_bash(working_dir, log_dir, conf_file, RUN_TT_PIPELINE_WD, tt_conf_file)
 
-        time.sleep(0.3) # Wait for a short moment before requests so the cluster keeps up
+        time.sleep(WAIT_TIME_BETWEEN_JOBS) # Wait for a short moment between requests so the cluster keeps up
