@@ -234,7 +234,7 @@ def create_fits_file_from_data_array(datacube_array: np.array, origin: list[floa
 	if not os.path.isdir(output_dir):
 		os.makedirs(output_dir)
 
-	if ".fits" not in filename:
+	if not filename.endswith(".fits"):
 		filename += ".fits"
 
 	hdul.writeto(os.path.join(output_dir, filename), overwrite=True)
