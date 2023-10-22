@@ -139,7 +139,7 @@ def create_traveltime_plot(tt_plus:np.ndarray, tt_minus:np.ndarray, param_dict:d
     plt.show()
     # plt.savefig(save_to, dpi=300)
     
-def print_mean_traveltime_value_around_center(tt_plus:np.ndarray, tt_minus:np.ndarray):
+def calculate_mean_traveltime_value_around_center(tt_plus:np.ndarray, tt_minus:np.ndarray):
     
     tt_data = tt_plus - tt_minus
     

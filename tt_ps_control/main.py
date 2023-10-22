@@ -46,5 +46,5 @@ if __name__ == '__main__':
         
         param_dict = tt.create_param_dict_from_mat_file(mat_file)
         
-        tt.print_mean_traveltime_value_around_center(tt_plus, tt_minus)
+        tt.calculate_mean_traveltime_value_around_center(tt_plus, tt_minus)
         tt.create_traveltime_plot(tt_plus, tt_minus, param_dict, SAVE_TO_PATH)
