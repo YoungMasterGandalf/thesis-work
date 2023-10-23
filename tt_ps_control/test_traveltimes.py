@@ -84,7 +84,6 @@ def create_param_dict_from_mat_file(mat_file):
     assert "param" in mat_file, "The 'param' key not present in parsed .mat file."
     
     param = mat_file["param"]
-    print("PARAM ", param)
     PARAM_KEYS = ['dx', 'dy', 'nx', 'ny', 'avefilter', 'komega_filter', 'distance']
 
     param_dict = {}
@@ -95,6 +94,8 @@ def create_param_dict_from_mat_file(mat_file):
         value = flatten_array_and_get_first_value(value)
         
         param_dict[key] = value
+        
+    print(f'Created param dict:', param_dict, sep='\n')
             
     return param_dict
 
