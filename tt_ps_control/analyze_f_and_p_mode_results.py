@@ -42,6 +42,8 @@ if __name__ == '__main__':
     if not os.path.isdir(working_dir):
         raise NotADirectoryError(f'Entered PATH "{working_dir}" does not lead to a folder.')
     
+    print(f"Running f and p modes data analysis in a directory '{working_dir}'")
+    
     # Get the list of file paths
     file_paths = find_files(working_dir=working_dir)
     
