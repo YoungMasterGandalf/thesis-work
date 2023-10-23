@@ -11,11 +11,6 @@ def main(folder_path, pattern):
     # Go to the folder
     os.chdir(folder_path)
 
-    # Activate conda environment on the cluster
-    print("Running hook ...")
-    subprocess.run(["/software/anaconda3/bin/conda", "shell.bash", "hook"])
-    print("Activating conda environment ...")
-
     # Compile regex pattern
     regex_pattern = re.compile(pattern)
 
