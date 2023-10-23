@@ -6,7 +6,12 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
+# A path to working directory containing directories with travel time data from the TT pipeline
 folder_path=$1
+
+# Pattern for matching the directories with the data
+# Pattern example: TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)
+# Pattern example match: TT_hmi.v_45s_2018.03.26_00.00.00_lon_plus_310_lat_plus_0_vel_minus_167
 pattern=$2
 
 # Go to the folder
