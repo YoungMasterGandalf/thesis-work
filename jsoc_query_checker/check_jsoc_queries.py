@@ -15,7 +15,7 @@ if __name__ == "__main__":
     if not os.path.exists(queries_to_check_filename):
         raise FileNotFoundError(f'"{queries_to_check_filename}" does not exist, create it.')
     
-    with open("./requests_to_check.txt", "r") as file:
+    with open(queries_to_check_filename, "r") as file:
         jsoc_queries = file.readlines()
         
     if not jsoc_queries:
