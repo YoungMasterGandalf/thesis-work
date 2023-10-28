@@ -1,0 +1,35 @@
+#!/bin/bash
+
+###############################################################
+# PBS part
+###############################################################
+
+# Assigns a job name
+#PBS -N analyze_TT_results
+
+# Assigns the queue
+#PBS -q eternity
+
+#Join option  
+#PBS -j oe
+#PBS -M daniel123chmurny@gmail.com
+
+# Sends mail to the user when the job aborts, begins, end.
+#PBS -m a
+
+#PBS -V
+python_script_path=${script_path}
+data_folder=${data_folder}
+
+#. ~/.bashrc
+
+##############################################################
+# Execution
+##############################################################
+
+export LC_ALL=POSIX
+echo "Running hook ..."
+eval "$(/software/anaconda3/bin/conda shell.bash hook)"
+echo "Activating conda environment ..." 
+
+python $python_script_path $data_folder
