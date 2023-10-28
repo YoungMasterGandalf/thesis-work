@@ -5,7 +5,7 @@ import subprocess
 import time
 
 PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)"
-RUN_VIA_QSUB: bool = False
+RUN_VIA_QSUB: bool = True
 
 def main(folder_path, pattern):
     # Store current working dir (containing the python script for data analysis) to a variable
