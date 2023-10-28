@@ -20,7 +20,11 @@ def main(folder_path, pattern):
     # Find folders containing the pattern and pass each as an argument to the python script
     for folder in os.listdir("."):
         if os.path.isdir(folder) and regex_pattern.match(folder):
-            subprocess.run(["python", python_script_path, folder])
+            if RUN_VIA_QSUB:
+                pbs_file_path = os.path.join(python_script_dir, "run_analyze_tt_results.pbs")
+                subprocess.run(["qsub", pbs_file_path, python_script_path, folder])
+            else:
+                subprocess.run(["python", python_script_path, folder])
             print(f"Finished analyzing {folder}.")
 
     print("Finished analyzing folders.")
