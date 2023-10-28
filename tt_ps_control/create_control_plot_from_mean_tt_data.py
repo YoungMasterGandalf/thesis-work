@@ -13,7 +13,7 @@ MODE: Literal['f', 'p1', 'p2', 'p3'] = 'f'
 GEOMETRY: Literal['cos_m0', 'cos_m1', 'sin_m1'] = 'cos_m1'
 DISTANCE: int = 10
 
-DATA_FILE_NAME: str = 'f_and_p_modes_analysis.csv'
+DATA_FILE_NAME: str = 'tt_data_analysis.csv'
 
 SAVE_PLOT_TO: str = '/nfshome/chmurnyd/test_plot1.png'
 
@@ -26,7 +26,7 @@ def create_velocity_value_from_string_representation(velocity_sign_str: str, vel
 def main(folder_path, pattern):
     # Store current working dir (containing the python script for data analysis) to a variable
     python_script_dir = os.getcwd()
-    python_script_path = os.path.join(python_script_dir, "analyze_f_and_p_mode_results.py")
+    python_script_path = os.path.join(python_script_dir, "analyze_tt_results.py")
 
     # Go to the folder
     os.chdir(folder_path)
