@@ -9,13 +9,16 @@ import numpy as np
 from scipy.stats import linregress
 from typing import Literal
 
+# PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)"
+PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_0_vel_(plus|minus)_(\d+)"
+
 MODE: Literal['f', 'p1', 'p2', 'p3'] = 'f'
 GEOMETRY: Literal['cos_m0', 'cos_m1', 'sin_m1'] = 'cos_m1'
-DISTANCE: int = 10
+DISTANCE: int = 15
 
 DATA_FILE_NAME: str = 'tt_data_analysis.csv'
 
-SAVE_PLOT_TO: str = '/nfshome/chmurnyd/test_plot1.png'
+SAVE_PLOT_TO: str = '/nfshome/chmurnyd/test_plot_f_cos_m1_15.png'
 
 def create_velocity_value_from_string_representation(velocity_sign_str: str, velocity_value_str: str):
     velocity_value = ast.literal_eval(velocity_value_str)
@@ -57,17 +60,12 @@ def main(folder_path, pattern):
     return velocities, mean_traveltimes
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python script.py <folder_path> <pattern>")
+    if len(sys.argv) != 2:
+        print("Usage: python create_control_plot_from_mean_tt_data.py <folder_path>")
         sys.exit(1)
 
     folder_path = sys.argv[1]
-    pattern = sys.argv[2]
-    velocities, mean_traveltimes = main(folder_path, pattern)
-    
-    # fig = plt.figure()
-    # plt.scatter(velocities, mean_traveltimes)
-    # plt.savefig(SAVE_PLOT_TO, dpi=300)
+    velocities, mean_traveltimes = main(folder_path, PATTERN)
 
     fig, ax = plt.subplots(figsize=(8, 6))
 
@@ -77,7 +75,9 @@ if __name__ == "__main__":
     # Fit data with linear regression
     slope, intercept, r_value, p_value, std_err = linregress(velocities, mean_traveltimes)
     line = np.poly1d([slope, intercept])
-    plt.plot(velocities, line(velocities), color='red', label='Linear fit')
+    plt.plot(velocities, line(velocities), color='red', label=f'Linear fit (y = {slope}x + {intercept})')
+    
+    ax.set_title(f'{MODE}_{GEOMETRY}_{DISTANCE} - 100 datacubes')
 
     # Labels
     ax.set_xlabel(r'Planted longitudinal velocity $(ms^{-1})$', fontsize=14)
