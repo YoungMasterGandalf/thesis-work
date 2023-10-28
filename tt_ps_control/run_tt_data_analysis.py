@@ -24,7 +24,7 @@ def main(folder_path, pattern):
             print(f"Analyzing folder {folder}...")
             if RUN_VIA_QSUB:
                 pbs_file_path = os.path.join(python_script_dir, "run_analyze_tt_results.pbs")
-                subprocess.run(["qsub", "-v", f'python_script_path={python_script_path},data_folder={folder}', pbs_file_path])
+                subprocess.run(["qsub", "-v", f'script_path={python_script_path},data_folder={folder}', pbs_file_path])
                 time.sleep(1) # Add some delay so qsub doesn't get overwhelmed
             else:
                 subprocess.run(["python", python_script_path, folder])
