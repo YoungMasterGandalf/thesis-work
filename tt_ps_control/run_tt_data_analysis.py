@@ -22,7 +22,7 @@ def main(folder_path, pattern):
         if os.path.isdir(folder) and regex_pattern.match(folder):
             if RUN_VIA_QSUB:
                 pbs_file_path = os.path.join(python_script_dir, "run_analyze_tt_results.pbs")
-                subprocess.run(["qsub", pbs_file_path, python_script_path, folder])
+                subprocess.run(["qsub", "-v", f'python_script_path={python_script_path},data_folder={folder}', pbs_file_path])
             else:
                 subprocess.run(["python", python_script_path, folder])
             print(f"Finished analyzing {folder}.")
