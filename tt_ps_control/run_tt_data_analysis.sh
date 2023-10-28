@@ -25,7 +25,7 @@ echo "Running hook ..."
 eval "$(/software/anaconda3/bin/conda shell.bash hook)"
 echo "Activating conda environment ..."
 
-python_script_path="$python_script_dir/analyze_f_and_p_mode_results.py"
+python_script_path="$python_script_dir/analyze_tt_results.py"
 echo "Python script path: $python_script_path"
 
 # Find folders containing the pattern and pass each as an argument to the python script
