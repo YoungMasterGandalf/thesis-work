@@ -7,9 +7,12 @@ import test_traveltimes as tt
 
 from matlab_file_reading import read_mat_file
 
+OUTPUT_CSV_FILE_NAME: str = "tt_data_analysis.csv"
+
 def find_files(working_dir: str):
     # Define the regular expression pattern for the file names
-    pattern = re.compile(r'tt_(f|p1|p2|p3)_(sin|cos)_m[01]_([5-9]|1[0-9]|20)\.mat$')
+    # pattern = re.compile(r'tt_(f|p1|p2|p3)_(sin|cos)_m[01]_([5-9]|1[0-9]|20)\.mat$')
+    pattern = re.compile(r'tt_(f|p[1-4]|td[1-9]|td1[0-1])_(sin|cos)_m[01]_([5-9]|1[0-9]|20)\.mat$')
 
     # Initialize a list to store the file paths
     file_paths = []
@@ -74,6 +77,6 @@ if __name__ == '__main__':
     extracted_data_df.sort_values(by=["mode"]) # sort data in DF by mode, i.e. f -> p1 -> p2 -> p3
     
     # Save data to a csv file located in the working directory
-    csv_file_path = os.path.join(working_dir, "f_and_p_modes_analysis.csv")
+    csv_file_path = os.path.join(working_dir, OUTPUT_CSV_FILE_NAME)
     extracted_data_df.to_csv(csv_file_path)
         
