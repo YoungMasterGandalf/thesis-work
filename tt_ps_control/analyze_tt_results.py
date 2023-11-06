@@ -12,7 +12,7 @@ OUTPUT_CSV_FILE_NAME: str = "tt_data_analysis.csv"
 def find_files(working_dir: str):
     # Define the regular expression pattern for the file names
     # pattern = re.compile(r'tt_(f|p1|p2|p3)_(sin|cos)_m[01]_([5-9]|1[0-9]|20)\.mat$')
-    pattern = re.compile(r'tt_(f|p[1-4]|td[1-9]|td1[0-1])_(sin|cos)_m[01]_([5-9]|1[0-9]|20)\.mat$')
+    pattern = re.compile(r'tt_(f|p[1-4]|td[1-9]|td1[0-1])_(sin|cos)_m[01]_((\d|[1-9]\d)(\.\d)?|100)\.mat$')
 
     # Initialize a list to store the file paths
     file_paths = []
