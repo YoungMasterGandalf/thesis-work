@@ -144,6 +144,11 @@ if __name__ == "__main__":
 
     folder_path = sys.argv[1]
     
+    if not os.path.exists(OUTPUT_DIR):
+        print(f"Directory {OUTPUT_DIR} does not exist.")
+        print(f"Creating output directory {OUTPUT_DIR}")
+        os.makedirs(OUTPUT_DIR)
+    
     if SINGLE_PLOT_MODE:
         velocities, mean_traveltimes = get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, PATTERN)
         
