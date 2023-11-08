@@ -11,14 +11,34 @@ from typing import Literal
 
 # PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)"
 PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_0_vel_(plus|minus)_(\d+)"
+DATA_FILE_NAME: str = "tt_data_analysis.csv"
+OUTPUT_DIR: str = "/nfshome/chmurnyd"
 
+SINGLE_PLOT_MODE: bool = True
+
+# Single plot mode configuration
 MODE: Literal['f', 'p1', 'p2', 'p3'] = 'f'
 GEOMETRY: Literal['cos_m0', 'cos_m1', 'sin_m1'] = 'cos_m1'
 DISTANCE: int = 15
+OUTPUT_FILENAME: str = "test_plot_f_cos_m1_15.png"
+# Single plot mode configuration END
 
-DATA_FILE_NAME: str = 'tt_data_analysis.csv'
-
-SAVE_PLOT_TO: str = '/nfshome/chmurnyd/test_plot_f_cos_m1_15.png'
+# Constants used in plot creation
+MODE_DISTANCE_MAPPING: dict = {
+    'f': [20, 19, 10, 9, 8, 7, 5, 6, 12, 11, 17, 18, 15, 13, 14, 16], 
+    'p1': [20, 19, 14, 13, 8, 9, 7, 5, 15, 10, 6, 12, 16, 11, 18, 17], 
+    'p2': [20, 19, 15, 16, 10, 9, 8, 6, 12, 18, 5, 7, 11, 14, 13, 17], 
+    'p3': [20, 19, 17, 14, 12, 10, 7, 6, 5, 9, 11, 13, 18, 16, 8, 15], 
+    'p4': [10, 11, 6, 5, 15, 17, 8, 7, 20, 12, 9, 13, 16, 14, 19, 18],
+    'td1': [3.4, 5.1, 2.5, 4.2, 6],
+    'td2': [4.2, 5.1, 6.8, 6, 7.7],
+    'td3': [6, 7.9, 7, 8.9, 9.9],
+    'td4': [10.8, 11.6, 12.4, 13.3, 9.9],
+    'td5': [15, 13, 17, 20, 18],
+    'td6': [24, 22, 21, 18, 19],
+    'td7': [29, 23, 25, 27, 22]
+    }
+GEOMETRIES = ["cos_m0", "cos_m1", "sin_m1"]
 
 def create_velocity_value_from_string_representation(velocity_sign_str: str, velocity_value_str: str):
     velocity_value = ast.literal_eval(velocity_value_str)
@@ -26,11 +46,7 @@ def create_velocity_value_from_string_representation(velocity_sign_str: str, vel
     
     return velocity_value
 
-def main(folder_path, pattern):
-    # Store current working dir (containing the python script for data analysis) to a variable
-    python_script_dir = os.getcwd()
-    python_script_path = os.path.join(python_script_dir, "analyze_tt_results.py")
-
+def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
     # Go to the folder
     os.chdir(folder_path)
 
@@ -59,25 +75,48 @@ def main(folder_path, pattern):
 
     return velocities, mean_traveltimes
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python create_control_plot_from_mean_tt_data.py <folder_path>")
-        sys.exit(1)
+def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
+    # Go to the folder
+    os.chdir(folder_path)
 
-    folder_path = sys.argv[1]
-    velocities, mean_traveltimes = main(folder_path, PATTERN)
+    # Compile regex pattern
+    regex_pattern = re.compile(pattern)
+    
+    total_df = None
 
+    # Find folders containing the pattern and pass each as an argument to the python script
+    for folder in os.listdir("."):
+        match = regex_pattern.match(folder)
+        if os.path.isdir(folder) and match:
+            data_file_path = os.path.join(folder, DATA_FILE_NAME)
+            if os.path.isfile(data_file_path):
+                velocity_sign = match.group(8)
+                velocity_value = match.group(9)
+                velocity_value = create_velocity_value_from_string_representation(velocity_sign_str=velocity_sign, 
+                                                                                  velocity_value_str=velocity_value)
+                df = pd.read_csv(data_file_path)
+                df['velocity'] = velocity_value
+                # Filter DataFrame and get traveltime_mean value
+                # traveltime_mean = df.loc[(df['mode'] == MODE) & (df['geometry'] == GEOMETRY) & (df['distance'] == DISTANCE), 
+                #                          'traveltime_mean'].values[0]
+                # velocities.append(velocity_value)
+                # mean_traveltimes.append(traveltime_mean)
+                if type(total_df) == pd.DataFrame:
+                    total_df.append(df, ignore_index=True)
+                else:
+                    total_df = df
+
+    return total_df
+
+def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, output_file_path):
     fig, ax = plt.subplots(figsize=(8, 6))
+    
+    ax.scatter(velocities, mean_traveltimes, label='Mean traveltimes around center')
 
-    # Scatter plot
-    scatter = ax.scatter(velocities, mean_traveltimes, label='Mean traveltimes around center')
-
-    # Fit data with linear regression
-    slope, intercept, r_value, p_value, std_err = linregress(velocities, mean_traveltimes)
     line = np.poly1d([slope, intercept])
     plt.plot(velocities, line(velocities), color='red', label=f'Linear fit (y = {slope}x + {intercept})')
     
-    ax.set_title(f'{MODE}_{GEOMETRY}_{DISTANCE} - 100 datacubes')
+    ax.set_title(f'{MODE}_{GEOMETRY}_{DISTANCE}')
 
     # Labels
     ax.set_xlabel(r'Planted longitudinal velocity $(ms^{-1})$', fontsize=14)
@@ -96,5 +135,51 @@ if __name__ == "__main__":
     ax.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
 
     # Save plot
-    plt.savefig(SAVE_PLOT_TO, dpi=300)
+    plt.savefig(output_file_path, dpi=600)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python create_control_plot_from_mean_tt_data.py <folder_path>")
+        sys.exit(1)
+
+    folder_path = sys.argv[1]
+    
+    if SINGLE_PLOT_MODE:
+        velocities, mean_traveltimes = get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, PATTERN)
+        
+        # Fit data with linear regression
+        slope, intercept, r_value, p_value, std_err = linregress(velocities, mean_traveltimes)
+        
+        output_file_path = os.path.join(OUTPUT_DIR, OUTPUT_FILENAME)
+        create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, 
+                                                output_file_path=output_file_path)
+    else:
+        slope_intercept_df = pd.DataFrame(columns=['slope', 'intercept'])
+        
+        total_df = get_combined_dataframe_for_multiplot_case(folder_path=folder_path, pattern=PATTERN)
+        
+        for mode, mode_distances in MODE_DISTANCE_MAPPING.items():
+            for distance in mode_distances:
+                for geometry in GEOMETRIES:
+                    velocities_and_mean_traveltimes = total_df.loc[
+                        (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & (total_df['distance'] == distance), 
+                        ['velocity', 'traveltime_mean']
+                        ]
+                    velocities = [x[0] for x in velocities_and_mean_traveltimes]
+                    mean_traveltimes = [x[1] for x in velocities_and_mean_traveltimes]
+                    
+                    # Fit data with linear regression
+                    slope, intercept, r_value, p_value, std_err = linregress(velocities, mean_traveltimes)
+
+                    new_row_df = pd.DataFrame({'slope': slope, 'intercept': intercept})
+                    slope_intercept_df = pd.concat(slope_intercept_df, new_row_df, ignore_index=True)
+                    
+                    output_filename = f'{mode}_{geometry}_{distance}.png'
+                    output_file_path = os.path.join(OUTPUT_DIR, output_filename)
+                    create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, 
+                                                            output_file_path=output_file_path)
+                    
+        slope_intercept_results_filename = "slopes_and_intercepts.csv"
+        slope_intercept_output_path = os.path.join(OUTPUT_DIR, slope_intercept_results_filename)
+        slope_intercept_df.to_csv(slope_intercept_output_path)
 
