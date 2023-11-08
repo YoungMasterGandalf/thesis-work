@@ -109,7 +109,7 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
                 # velocities.append(velocity_value)
                 # mean_traveltimes.append(traveltime_mean)
                 if type(total_df) == pd.DataFrame:
-                    total_df = pd.concat(total_df, df, ignore_index=True)
+                    total_df = pd.concat([total_df, df], ignore_index=True)
                 else:
                     total_df = df
                     
@@ -197,7 +197,7 @@ if __name__ == "__main__":
                     slope, intercept, r_value, p_value, std_err = linregress(filtered_velocities, filtered_mean_traveltimes)
 
                     new_row_df = pd.DataFrame({'slope': slope, 'intercept': intercept})
-                    slope_intercept_df = pd.concat(slope_intercept_df, new_row_df, ignore_index=True)
+                    slope_intercept_df = pd.concat([slope_intercept_df, new_row_df], ignore_index=True)
                     
                     output_filename = f'{mode}_{geometry}_{distance}.png'
                     output_file_path = os.path.join(OUTPUT_DIR, output_filename)
