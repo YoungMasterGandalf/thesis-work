@@ -109,7 +109,7 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
                 # velocities.append(velocity_value)
                 # mean_traveltimes.append(traveltime_mean)
                 if type(total_df) == pd.DataFrame:
-                    total_df.append(df, ignore_index=True)
+                    total_df = pd.concat(total_df, df, ignore_index=True)
                 else:
                     total_df = df
                     
