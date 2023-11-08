@@ -83,6 +83,9 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
     regex_pattern = re.compile(pattern)
     
     total_df = None
+    
+    print(f'Starting creation of combined DataFrame...')
+    print(f'Root directory: {folder_path}', f'Pattern: {pattern}', sep='\n')
 
     # Find folders containing the pattern and pass each as an argument to the python script
     for folder in os.listdir("."):
@@ -105,6 +108,8 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
                     total_df.append(df, ignore_index=True)
                 else:
                     total_df = df
+                    
+    print('Combined DataFrame creation finished.')
 
     return total_df
 
@@ -167,9 +172,12 @@ if __name__ == "__main__":
         
         total_df = get_combined_dataframe_for_multiplot_case(folder_path=folder_path, pattern=PATTERN)
         
+        print('Starting multiplot creation (this might take a while)...\n')
+        
         for mode, mode_distances in MODE_DISTANCE_MAPPING.items():
             for distance in mode_distances:
                 for geometry in GEOMETRIES:
+                    print(f'Creating plot for configuration: {mode}_{geometry}_{distance}')
                     velocities_and_mean_traveltimes = total_df.loc[
                         (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & (total_df['distance'] == distance), 
                         ['velocity', 'traveltime_mean']
@@ -191,6 +199,7 @@ if __name__ == "__main__":
                     output_file_path = os.path.join(OUTPUT_DIR, output_filename)
                     create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, 
                                                             output_file_path=output_file_path)
+                    print('Plot finished.\n')
                     
         slope_intercept_results_filename = "slopes_and_intercepts.csv"
         slope_intercept_output_path = os.path.join(OUTPUT_DIR, slope_intercept_results_filename)
