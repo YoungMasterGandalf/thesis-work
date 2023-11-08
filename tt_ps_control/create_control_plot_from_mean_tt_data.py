@@ -152,8 +152,12 @@ if __name__ == "__main__":
     if SINGLE_PLOT_MODE:
         velocities, mean_traveltimes = get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, PATTERN)
         
-        # Fit data with linear regression
-        slope, intercept, r_value, p_value, std_err = linregress(velocities, mean_traveltimes)
+        # Fit data with linear regression on velocity interval (-300, 300) --> to avoid non-linearities
+        velocity_tt_pairs = list(zip(velocities, mean_traveltimes))
+        filtered_pairs = [(velocity, traveltime) for velocity, traveltime in velocity_tt_pairs if -300 <= velocity <= 300]
+        filtered_velocities = [x[0] for x in filtered_pairs]
+        filtered_mean_traveltimes = [x[1] for x in filtered_pairs]
+        slope, intercept, r_value, p_value, std_err = linregress(filtered_velocities, filtered_mean_traveltimes)
         
         output_file_path = os.path.join(OUTPUT_DIR, OUTPUT_FILENAME)
         create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, 
@@ -173,8 +177,12 @@ if __name__ == "__main__":
                     velocities = [x[0] for x in velocities_and_mean_traveltimes]
                     mean_traveltimes = [x[1] for x in velocities_and_mean_traveltimes]
                     
-                    # Fit data with linear regression
-                    slope, intercept, r_value, p_value, std_err = linregress(velocities, mean_traveltimes)
+                    # Fit data with linear regression on velocity interval (-300, 300) --> to avoid non-linearities
+                    velocity_tt_pairs = list(zip(velocities, mean_traveltimes))
+                    filtered_pairs = [(velocity, traveltime) for velocity, traveltime in velocity_tt_pairs if -300 <= velocity <= 300]
+                    filtered_velocities = [x[0] for x in filtered_pairs]
+                    filtered_mean_traveltimes = [x[1] for x in filtered_pairs]
+                    slope, intercept, r_value, p_value, std_err = linregress(filtered_velocities, filtered_mean_traveltimes)
 
                     new_row_df = pd.DataFrame({'slope': slope, 'intercept': intercept})
                     slope_intercept_df = pd.concat(slope_intercept_df, new_row_df, ignore_index=True)
