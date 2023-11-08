@@ -186,8 +186,8 @@ if __name__ == "__main__":
                         (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & (total_df['distance'] == distance), 
                         ['velocity', 'traveltime_mean']
                         ]
-                    velocities = [x[0] for x in velocities_and_mean_traveltimes]
-                    mean_traveltimes = [x[1] for x in velocities_and_mean_traveltimes]
+                    velocities = velocities_and_mean_traveltimes['velocity'].tolist()
+                    mean_traveltimes = velocities_and_mean_traveltimes['traveltime_mean'].tolist()
                     
                     # Fit data with linear regression on velocity interval (-300, 300) --> to avoid non-linearities
                     velocity_tt_pairs = list(zip(velocities, mean_traveltimes))
