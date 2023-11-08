@@ -62,8 +62,10 @@ def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
         if os.path.isdir(folder) and match:
             data_file_path = os.path.join(folder, DATA_FILE_NAME)
             if os.path.isfile(data_file_path):
-                velocity_sign = match.group(8)
-                velocity_value = match.group(9)
+                # velocity_sign = match.group(8)
+                # velocity_value = match.group(9)
+                velocity_sign = match.group(7)
+                velocity_value = match.group(8)
                 velocity_value = create_velocity_value_from_string_representation(velocity_sign_str=velocity_sign, 
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
@@ -93,8 +95,10 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
         if os.path.isdir(folder) and match:
             data_file_path = os.path.join(folder, DATA_FILE_NAME)
             if os.path.isfile(data_file_path):
-                velocity_sign = match.group(8)
-                velocity_value = match.group(9)
+                # velocity_sign = match.group(8)
+                # velocity_value = match.group(9)
+                velocity_sign = match.group(7)
+                velocity_value = match.group(8)
                 velocity_value = create_velocity_value_from_string_representation(velocity_sign_str=velocity_sign, 
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
