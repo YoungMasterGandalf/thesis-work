@@ -150,6 +150,9 @@ def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, output
 
     # Save plot
     plt.savefig(output_file_path, dpi=600)
+    
+    # Close plot to release memory
+    plt.close(fig)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
