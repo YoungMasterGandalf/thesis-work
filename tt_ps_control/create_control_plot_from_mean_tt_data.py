@@ -71,7 +71,7 @@ def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
                 # Filter DataFrame and get traveltime_mean value
-                traveltime_mean = df.loc[(df['mode'] == MODE) & (df['geometry'] == GEOMETRY) & (df['distance'].round() == DISTANCE), 
+                traveltime_mean = df.loc[(df['mode'] == MODE) & (df['geometry'] == GEOMETRY) & (np.round(df['distance']) == np.round(DISTANCE)), 
                                          'traveltime_mean'].values[0]
                 velocities.append(velocity_value)
                 mean_traveltimes.append(traveltime_mean)
@@ -184,7 +184,7 @@ if __name__ == "__main__":
                 for geometry in GEOMETRIES:
                     print(f'Creating plot for configuration: {mode}_{geometry}_{distance}')
                     velocities_and_mean_traveltimes = total_df.loc[
-                        (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & (total_df['distance'].round() == distance), 
+                        (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & (np.round(total_df['distance']) == np.round(distance)), 
                         ['velocity', 'traveltime_mean']
                         ]
                     velocities = velocities_and_mean_traveltimes['velocity'].tolist()
