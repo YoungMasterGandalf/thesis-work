@@ -197,8 +197,8 @@ if __name__ == "__main__":
                     filtered_mean_traveltimes = [x[1] for x in filtered_pairs]
                     slope, intercept, r_value, p_value, std_err = linregress(filtered_velocities, filtered_mean_traveltimes)
 
-                    new_row_columns = [['mode', 'geometry', 'distance', 'slope', 'intercept']]
-                    new_row_data = [mode, geometry, distance, slope, intercept]
+                    new_row_columns = ['mode', 'geometry', 'distance', 'slope', 'intercept']
+                    new_row_data = [[mode, geometry, distance, slope, intercept]]
                     new_row_df = pd.DataFrame(new_row_data, columns=new_row_columns)
                     slope_intercept_df = pd.concat([slope_intercept_df, new_row_df], ignore_index=True)
                     
