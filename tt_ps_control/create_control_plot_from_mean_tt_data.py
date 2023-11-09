@@ -70,8 +70,12 @@ def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
                 velocity_value = create_velocity_value_from_string_representation(velocity_sign_str=velocity_sign, 
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
+                
+                # To ensure "half away from zero" strategy instead of "half to even"
+                distance_with_added_bias = DISTANCE + min(0.01 * DISTANCE, 0.001)
+                
                 # Filter DataFrame and get traveltime_mean value
-                traveltime_mean = df.loc[(df['mode'] == MODE) & (df['geometry'] == GEOMETRY) & (np.round(df['distance']) == np.round(DISTANCE)), 
+                traveltime_mean = df.loc[(df['mode'] == MODE) & (df['geometry'] == GEOMETRY) & (df['distance'].round == round(distance_with_added_bias)), 
                                          'traveltime_mean'].values[0]
                 velocities.append(velocity_value)
                 mean_traveltimes.append(traveltime_mean)
@@ -183,8 +187,12 @@ if __name__ == "__main__":
             for distance in mode_distances:
                 for geometry in GEOMETRIES:
                     print(f'Creating plot for configuration: {mode}_{geometry}_{distance}')
+                    
+                    # To ensure "half away from zero" strategy instead of "half to even"
+                    distance_with_added_bias = distance + min(0.01 * distance, 0.001)
+                    
                     velocities_and_mean_traveltimes = total_df.loc[
-                        (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & (np.round(total_df['distance']) == np.round(distance)), 
+                        (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & (total_df['distance'].round() == round(distance_with_added_bias)), 
                         ['velocity', 'traveltime_mean']
                         ]
                     velocities = velocities_and_mean_traveltimes['velocity'].tolist()
