@@ -144,8 +144,12 @@ def calculate_mean_traveltime_value_around_center(tt_plus:np.ndarray, tt_minus:n
     
     tt_data = tt_plus - tt_minus
     
-    lower_boundary = int(tt_data.shape[0]/2 - tt_data.shape[0]/4)
-    upper_boundary = int(tt_data.shape[0]/2 + tt_data.shape[0]/4)
+    # NOTE: 256x256 px area around center (if a whole picture is 512x512) --> DEPRECATED for 100x100 px around center
+    # lower_boundary = int(tt_data.shape[0]/2 - tt_data.shape[0]/4)
+    # upper_boundary = int(tt_data.shape[0]/2 + tt_data.shape[0]/4)
+    
+    lower_boundary = int(tt_data.shape[0]/2 - 50)
+    upper_boundary = int(tt_data.shape[0]/2 + 50)
     
     tt_around_center = tt_data[lower_boundary:upper_boundary, lower_boundary:upper_boundary]
     mean_around_center = tt_around_center.mean()
