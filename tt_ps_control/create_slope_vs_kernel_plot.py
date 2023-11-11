@@ -44,7 +44,7 @@ if __name__ == "__main__":
         kernel_filename = create_kernel_filename(mode=row["mode"], geometry=row["geometry"], distance=row["distance"])
         integral = get_integral_from_kernel_file(root_dir=KERNEL_ROOT_DIR, filename=kernel_filename)
         
-        slopes.append(row["slope"])
+        slopes.append(slope)
         integrals.append(integral)
         
     # Fit data with linear regression
