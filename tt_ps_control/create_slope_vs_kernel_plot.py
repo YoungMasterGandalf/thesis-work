@@ -40,6 +40,7 @@ if __name__ == "__main__":
     df = pd.read_csv(DATA_FILE_PATH)
     
     for i, row in df.iterrows():
+        print(f'Processing row {i} out of {df.shape[0]}')
         slope = row["slope"] * 10**3 # To match kernel units
         kernel_filename = create_kernel_filename(mode=row["mode"], geometry=row["geometry"], distance=row["distance"])
         integral = get_integral_from_kernel_file(root_dir=KERNEL_ROOT_DIR, filename=kernel_filename)
