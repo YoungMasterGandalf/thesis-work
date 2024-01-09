@@ -12,22 +12,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut dui eu urna ultr
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Features](#features)
 - [Installation](#installation)
+- [Check JSOC data completness](#check_jsoc_data_completness)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
-
-## Introduction
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut dui eu urna ultrices consectetur. Nulla facilisi. Proin in tristique eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Pellentesque aliquet tristique justo. Phasellus nec vestibulum ex. Vestibulum euismod auctor quam, a commodo libero lacinia in. Vestibulum dignissim mauris a ullamcorper mollis.
-
-## Features
-
-- Lorem ipsum feature 1
-- Lorem ipsum feature 2
-- ...
 
 ## Installation
 
@@ -36,6 +25,37 @@ To install and run this project, follow these steps:
 1. Clone this repository.
 2. Navigate to the project directory.
 3. Follow the steps mentioned in **Usage** chapter
+
+## Check JSOC data completness
+
+This section covers modules in `jsoc_query_checker` package. The folder structure of this package looks as follows:
+
+```shell
+jsoc_query_checker
+├── __init__.py
+├── check_jsoc_queries.py
+├── dates_to_queries.txt
+├── prepare_queries_from_dates.py
+├── queries_to_check
+└── run_check_jsoc_queries.pbs
+```
+
+Main aims of this package:
+* create JSOC query strings for 24 hour HMI Dopplergrams for provided dates
+* check if the data for these queries stored on JSOC are complete
+* provide a file containing queries for complete data and queries for incomplete data
+
+# How to use:
+
+1. Save the dates you want to convert to queries into a file `dates_to_queries.txt` in format YYYYMMDD.
+2. Run `python3 prepare_queries_from_dates.py`. You should then see a new file `queries_to_check.txt`.
+3. Set your JSOC e-mail, method and protocol constants in `check_jsoc_queries.py`.
+4. Run `python3 check_jsoc_queries.py`.
+5. Queries with complete data will be stored in `queries_with_complete_data.txt` while incomplete data queries will 
+be stored in `incomplete_data_queries.json`.
+
+> [!NOTE]
+> Documentation for other packages and modules will be gradually added.
 
 ## Usage
 
