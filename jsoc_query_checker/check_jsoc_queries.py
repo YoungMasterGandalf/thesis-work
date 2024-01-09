@@ -13,7 +13,7 @@ EXPECTED_FILE_COUNT: int = 1921
 if __name__ == "__main__":
     queries_to_check_filename = "./queries_to_check.txt"
     if not os.path.exists(queries_to_check_filename):
-        raise FileNotFoundError(f'"{queries_to_check_filename}" does not exist, create it.')
+        raise FileNotFoundError(f'File "{queries_to_check_filename}" does not exist, create it.')
     
     with open(queries_to_check_filename, "r") as file:
         jsoc_queries = file.readlines()
