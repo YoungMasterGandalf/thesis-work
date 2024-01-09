@@ -13,7 +13,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut dui eu urna ultr
 ## Table of Contents
 
 - [Installation](#installation)
-- [Check JSOC data completness](#check_jsoc_data_completness)
+- [Check JSOC data completness](#check-jsoc-data-completness)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -45,7 +45,7 @@ Main aims of this package:
 * check if the data for these queries stored on JSOC are complete
 * provide a file containing queries for complete data and queries for incomplete data
 
-# How to use:
+### How to use:
 
 1. Save the dates you want to convert to queries into a file `dates_to_queries.txt` in format YYYYMMDD.
 2. Run `python3 prepare_queries_from_dates.py`. You should then see a new file `queries_to_check.txt`.
