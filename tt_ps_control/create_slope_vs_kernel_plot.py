@@ -10,8 +10,10 @@ import test_traveltimes as tt
 
 from matlab_file_reading import read_mat_file
 
-DATA_FILE_PATH = "/nfshome/chmurnyd/plots-2023-11-09/slopes_and_intercepts.csv"
-KERNEL_ROOT_DIR = "/seismo2/michal/FLOW_KERNELS/PtA"
+# DATA_FILE_PATH = "/nfshome/chmurnyd/plots-2023-11-09/slopes_and_intercepts.csv"
+DATA_FILE_PATH = "/Users/daniel/Downloads/slopes_and_intercepts.csv"
+# KERNEL_ROOT_DIR = "/seismo2/michal/FLOW_KERNELS/PtA"
+KERNEL_ROOT_DIR = "/Users/daniel/Downloads/kernels/kernels"
 OUTPUT_FILE_PATH = "/nfshome/chmurnyd/slope_vs_kernel.png"
 
 colors_dict = {
