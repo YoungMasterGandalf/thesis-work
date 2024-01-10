@@ -14,6 +14,21 @@ DATA_FILE_PATH = "/nfshome/chmurnyd/plots-2023-11-09/slopes_and_intercepts.csv"
 KERNEL_ROOT_DIR = "/seismo2/michal/FLOW_KERNELS/PtA"
 OUTPUT_FILE_PATH = "/nfshome/chmurnyd/slope_vs_kernel.png"
 
+colors_dict = {
+    'f': '#1f77b4',   # Blue
+    'p1': '#ff7f0e',  # Orange
+    'p2': '#2ca02c',  # Green
+    'p3': '#d62728',  # Red
+    'p4': '#9467bd',  # Purple
+    'td1': '#8c564b', # Brown
+    'td2': '#e377c2', # Pink
+    'td3': '#7f7f7f', # Gray
+    'td4': '#bcbd22', # Olive
+    'td5': '#17becf', # Cyan
+    'td6': '#9b59b6', # Lavender
+    'dt7': '#3498db'  # Sky Blue
+}
+
 def create_kernel_filename(mode: str, geometry: str, distance: Union[int, float]):
     filename = f'k_ann_{mode}_kx_{geometry}_{distance}.mat'
     
