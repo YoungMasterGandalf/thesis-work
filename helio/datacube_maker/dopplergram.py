@@ -92,8 +92,7 @@ class Dopplergram:
 			ax.plot_coord(origin, 'o', color='red', fillstyle='none', markersize=20)
 
 			ax.set_title('Postel projection centered at ROI', y=1.1)
-			# plt.show()
-			plt.savefig("/Users/daniel/Documents/doppl_projection.png", dpi=600)
+			plt.show()
 
 		return out_map
 
