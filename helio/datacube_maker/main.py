@@ -38,7 +38,7 @@ if __name__ == "__main__":
 	conf_file_path = args.conf_path
  
 	if conf_file_path is None:
-		conf_file_path = "./datacube_maker/conf.json"
+		conf_file_path = "./helio/datacube_maker/conf.json"
 
 	config = set_up_configuration_from_json_conf_file(conf_file_path)
 
