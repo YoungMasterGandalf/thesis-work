@@ -115,12 +115,10 @@ def create_traveltime_plot(tt_plus:np.ndarray, tt_minus:np.ndarray, param_dict:d
     
     #* x axis will go from "minus this value" to "plus this value" (that's why the half is there)
     x_axis_extent = x_axis_pixel_count * x_axis_megameters_per_pixel / 2 
-    # x_axis_bounds = [-x_axis_extent/2, x_axis_extent/2]
     
     #* y axis will go from "minus this value" to "plus this value" (that's why the half is there)
     y_axis_extent = y_axis_pixel_count * y_axis_megameters_per_pixel / 2
-    # y_axis_bounds = [-y_axis_extent/2, y_axis_extent/2]
-
+    
     xticks = (-np.flip(np.arange(0, x_axis_extent, 100))).tolist() + np.arange(0, x_axis_extent, 100).tolist()
     yticks = (-np.flip(np.arange(0, y_axis_extent, 100))).tolist() + np.arange(0, y_axis_extent, 100).tolist()
 
@@ -141,13 +139,9 @@ def create_traveltime_plot(tt_plus:np.ndarray, tt_minus:np.ndarray, param_dict:d
     # plt.savefig(save_to, dpi=300)
     
 def calculate_mean_traveltime_value_around_center(tt_plus:np.ndarray, tt_minus:np.ndarray):
-    
     tt_data = tt_plus - tt_minus
     
-    # NOTE: 256x256 px area around center (if a whole picture is 512x512) --> DEPRECATED for 100x100 px around center
-    # lower_boundary = int(tt_data.shape[0]/2 - tt_data.shape[0]/4)
-    # upper_boundary = int(tt_data.shape[0]/2 + tt_data.shape[0]/4)
-    
+    # 100x100 px area around center
     lower_boundary = int(tt_data.shape[0]/2 - 50)
     upper_boundary = int(tt_data.shape[0]/2 + 50)
     
