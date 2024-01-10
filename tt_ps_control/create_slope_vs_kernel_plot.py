@@ -30,6 +30,7 @@ colors_dict = {
 }
 
 def create_kernel_filename(mode: str, geometry: str, distance: Union[int, float]):
+    distance = int(distance) if distance.is_integer() else distance
     filename = f'k_ann_{mode}_kx_{geometry}_{distance}.mat'
     
     return filename
