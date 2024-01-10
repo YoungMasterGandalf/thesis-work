@@ -1,0 +1,32 @@
+# PATH to single frame --> used in TEST MODE
+file_path: "/Users/daniel/Downloads/hmi.v_45s.20190120_000045_TAI.2.Dopplergram.fits"
+
+# PATH to a folder containing frames --> used when TEST MODE = false
+folder_path: "/Users/daniel/Documents/GitHub/thesis-work/data/one_file_test"
+
+# true --> single frame with plotting of the projection, false --> datacube creation, no plotting
+test_mode: true
+
+# Origin of the Postel projection in Carrington coordinates
+origin:
+  - 315.0   # Carrington longitude
+  - 0.0     # Carrington latitude
+
+# Shape of the projected area in pixels
+shape:
+  - 512     # width
+  - 512     # height
+
+time_step: 45.0 # Time step between frames in seconds
+
+# Projected data scaling in deg/px
+scale:
+  - 0.12    # Horizontal scale
+  - 0.12    # Vertical scale
+
+r_sun: 696.0 # Radius of the Sun in megameters
+artificial_lon_velocity: 145.0 # Artificialy implanted longitudinal velocity in m/s
+
+output_dir: "/Users/daniel/Downloads" # Output directory for the final datacube
+filename: "test_cube_nans.fits" # Output datacube filename
+jsoc_email: "daniel123chmurny@gmail.com" # JSOC account e-mail (necessary for data download)

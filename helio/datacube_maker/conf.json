@@ -1,8 +1,8 @@
 {
-    "file_path": "/nfsscratch/chmurnyd/1day/hmi.v_45s.20181129_000000_TAI.2.Dopplergram.fits",
-    "folder_path": "/nfsscratch/chmurnyd/1day",
-    "test_mode": false,
-    "origin": [120.0, -20.0],
+    "file_path": "/Users/daniel/Downloads/hmi.v_45s.20190120_000045_TAI.2.Dopplergram.fits",
+    "folder_path": "/Users/daniel/Documents/GitHub/thesis-work/data/one_file_test",
+    "test_mode": true,
+    "origin": [315.0, 0.0],
     "shape": [512, 512],
     "time_step": 45.0,
     "scale": [0.12, 0.12],

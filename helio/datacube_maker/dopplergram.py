@@ -71,7 +71,7 @@ class Dopplergram:
 
 			out_map.plot_settings = self.smap.plot_settings
 
-			fig = plt.figure(figsize=(8, 4))
+			fig = plt.figure(figsize=(12, 6))
 
 			ax = fig.add_subplot(1, 2, 1, projection=self.smap)
 			self.smap.plot(axes=ax)
@@ -91,8 +91,9 @@ class Dopplergram:
 			out_map.draw_limb(axes=ax, color='blue')
 			ax.plot_coord(origin, 'o', color='red', fillstyle='none', markersize=20)
 
-			ax.set_title('Postel projection centered at ROI', y=-0.1)
-			plt.show()
+			ax.set_title('Postel projection centered at ROI', y=1.1)
+			# plt.show()
+			plt.savefig("/Users/daniel/Documents/doppl_projection.png", dpi=600)
 
 		return out_map
 
