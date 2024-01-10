@@ -7,35 +7,39 @@ from plot_powerspectrum import create_powerspectrum_plot
 import test_traveltimes as tt
 
 #* PATH example
-# FILE_PATH = "/Users/daniel/Documents/diploma_thesis_sidework/komega_cube.mat_controlplots.mat"
+FILE_PATH = "/Users/daniel/Downloads/k_omega_minus_500.mat"
+# FILE_PATH = "/Users/daniel/Downloads/tt_f_cos_m1_20.mat"
+# FILE_PATH = "/Users/daniel/Documents/diploma_thesis_sidework/tt_f_cos_m1_10.mat"
+SAVE_TO_PATH = "/Users/daniel/Downloads/kx_ky_6h_zero_vel.png"
+JOB = "PS"
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    # parser = argparse.ArgumentParser()
     
-    job_help = "Enter which job should be made: 'TT' for travel-times testing, 'PS' for power-spectrum plot."
-    parser.add_argument('job', type=str, choices=["TT", "PS"], help=job_help)
+    # job_help = "Enter which job should be made: 'TT' for travel-times testing, 'PS' for power-spectrum plot."
+    # parser.add_argument('job', type=str, choices=["TT", "PS"], help=job_help)
     
-    file_path_help = """Path leading to a .mat file containing k_omega data, 
-    e.g.: "/Users/daniel/Documents/diploma_thesis_sidework/komega_cube.mat_controlplots.mat" """
-    parser.add_argument('file_path', type=str, help=file_path_help)
+    # file_path_help = """Path leading to a .mat file containing k_omega data, 
+    # e.g.: "/Users/daniel/Documents/diploma_thesis_sidework/komega_cube.mat_controlplots.mat" """
+    # parser.add_argument('file_path', type=str, help=file_path_help)
     
-    save_to_help = 'Where to save the .png plot. Write the full path ending with "/<filename>.png"!'
-    parser.add_argument('save_to', type=str, help=save_to_help)
+    # save_to_help = 'Where to save the .png plot. Write the full path ending with "/<filename>.png"!'
+    # parser.add_argument('save_to', type=str, help=save_to_help)
     
-    args = parser.parse_args()
+    # args = parser.parse_args()
     
-    FILE_PATH = args.file_path
+    # FILE_PATH = args.file_path
     assert os.path.exists(FILE_PATH), f'Entered PATH "{FILE_PATH}" does not exist.'
     assert os.path.isfile(FILE_PATH), f'Entered PATH "{FILE_PATH}" does not lead to a file.'
     
-    SAVE_TO_PATH = args.save_to
+    # SAVE_TO_PATH = args.save_to
     assert SAVE_TO_PATH.endswith(".png"), 'save_to argument must end with /<filename>.png'
     
     folder_path = SAVE_TO_PATH[:SAVE_TO_PATH.rfind("/")]
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
         
-    JOB = args.job
+    # JOB = args.job
     
     mat_file = read_mat_file(FILE_PATH)
     
