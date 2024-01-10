@@ -5,7 +5,7 @@ from matplotlib import colors
 #* PATH example
 # FILE_PATH = "/Users/daniel/Documents/diploma_thesis_sidework/komega_cube.mat_controlplots.mat"
 
-def plot_ring_diagram(mat_file):
+def create_ring_diagram_plot(mat_file):
     kx = mat_file["kx"]
     ky = mat_file["ky"]
     
