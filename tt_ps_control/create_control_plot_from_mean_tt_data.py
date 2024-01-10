@@ -48,7 +48,6 @@ def create_velocity_value_from_string_representation(velocity_sign_str: str, vel
     return velocity_value
 
 def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
-    # Go to the folder
     os.chdir(folder_path)
 
     # Compile regex pattern
