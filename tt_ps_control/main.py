@@ -2,7 +2,7 @@ import os
 import argparse
 
 from matlab_file_reading import read_mat_file
-from plot_powerspectrum import create_powerspectrum_fig_from_mat_file
+from plot_powerspectrum import create_powerspectrum_plot
 
 import test_traveltimes as tt
 

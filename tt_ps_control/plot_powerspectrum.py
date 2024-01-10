@@ -38,7 +38,7 @@ def create_ring_diagram_plot(mat_file):
     # plt.savefig(save_to, dpi=300)
     plt.show()
     
-def create_powerspectrum_fig_from_mat_file(mat_file, save_to:str):
+def create_powerspectrum_plot(mat_file, save_to:str):
     k_omega = mat_file["k_omega"]
     
     #* x axis: k (Mm^-1)
