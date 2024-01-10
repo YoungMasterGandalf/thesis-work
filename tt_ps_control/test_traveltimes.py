@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 from typing import Tuple
 
 AVEFILTER_MAPPING = {
-    "sin_m1": "s-n", #* south-north
-    "cos_m1": "e-w", #* east-west
-    "cos_m0": "o-i" #* out-in
+    "sin_m1": "s-n", # south-north
+    "cos_m1": "e-w", # east-west
+    "cos_m0": "o-i" # out-in
 }
 
 def flatten_array_and_get_first_value(array:np.ndarray):
