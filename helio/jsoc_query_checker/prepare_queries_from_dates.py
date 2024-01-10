@@ -16,7 +16,7 @@ def create_a_one_day_dopplergram_query_from_date(date: datetime.datetime) -> str
     return jsoc_query
 
 if __name__ == "__main__":
-    dates_to_queries_filename = "./dates_to_queries.txt"
+    dates_to_queries_filename = "./jsoc_query_checker/dates_to_queries.txt"
     
     if not os.path.exists(dates_to_queries_filename):
         raise FileNotFoundError(f'"{dates_to_queries_filename}" does not exist, create it.')
