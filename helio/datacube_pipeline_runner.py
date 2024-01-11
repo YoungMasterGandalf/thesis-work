@@ -20,7 +20,7 @@ def run_drms_and_tt_via_bash(drms_wd:str, drms_ld:str, drms_conffile:str, tt_wd:
     os.system(command)
 
 if __name__ == "__main__":
-    with open("./datacube_pipeline_helper_files/datacube_maker_inputs.json", "r") as file:
+    with open("./helio/datacube_pipeline_helper_files/datacube_maker_inputs.json", "r") as file:
         maker_inputs = json.load(file)
         
     for i, maker_input in enumerate(maker_inputs):
