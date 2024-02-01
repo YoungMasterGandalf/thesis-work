@@ -5,9 +5,9 @@ import time
 # TODO: Fix and reintroduce logger
 # from log import setup_logger
 
-DRMS_DATACUBE_PBS_PATH: str = "/nfsscratch/chmurnyd"
-RUN_TT_PIPELINE_PBS_PATH: str = "/nfsscratch/chmurnyd/thesis-work/"
-RUN_TT_PIPELINE_WD: str = "/nfsscratch/chmurnyd/travel-times/torque/"
+DRMS_DATACUBE_PBS_PATH: str = "/nfshome/chmurnyd/GitHub/thesis-work/helio"
+RUN_TT_PIPELINE_PBS_PATH: str = "/nfshome/chmurnyd/GitHub/thesis-work/helio"
+RUN_TT_PIPELINE_WD: str = "/nfshome/chmurnyd/travel-times/torque/"
 
 WAIT_TIME_BETWEEN_JOBS = 3 # Set at least to 2 seconds so as to avoid duplication in job ids (temstamps)
 
