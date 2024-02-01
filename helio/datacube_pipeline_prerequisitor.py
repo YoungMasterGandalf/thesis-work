@@ -55,7 +55,7 @@ LATITUDES: list[float] = [0.0]
 LOWER_VELOCITY_LIMIT: float = -500.
 UPPER_VELOCITY_LIMIT: float = 500.
 VELOCITY_SAMPLE_COUNT: int = 10
-OUTPUT_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/Datacubes"
+OUTPUT_ROOT_FOLDER: str = "/nfshome/chmurnyd/Datacubes"
 
 ### AUTOMATED PART SETTINGS END ###
 
@@ -69,12 +69,12 @@ SCALE: list[float] = [0.12, 0.12]
 R_SUN: float = 696.0
 JSOC_EMAIL: str = "daniel123chmurny@gmail.com"
 
-TRAVEL_TIMES_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/travel-times"
+TRAVEL_TIMES_ROOT_FOLDER: str = "/nfshome/chmurnyd/travel-times"
 PARAM_EXAMPLE_CONF_PATH: str = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, "PARAM-EXAMPLE.conf")
 
 ### STATIC CONF SETTINGS END ###
 
-REQUESTS_FILE_PATH = "/nfshome/chmurnyd/GitHub/thesis-work/datacube_pipeline_helper_files/requests_ready_for_download.json"
+REQUESTS_FILE_PATH = "/nfshome/chmurnyd/GitHub/thesis-work/helio/datacube_pipeline_helper_files/requests_ready_for_download.json"
 
 # TODO: Fix and reintroduce logger
 # module_logger = setup_logger(__name__)
