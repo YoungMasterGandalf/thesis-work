@@ -56,22 +56,23 @@ if __name__ == "__main__":
     if not os.path.exists(DATA_FILE_PATH):
         raise FileNotFoundError(f'File {DATA_FILE_PATH} does not exist.')
     
-    slopes = []
-    integrals = []
-    
     df = pd.read_csv(DATA_FILE_PATH)
+    
+    df["slope"] = df["slope"] * 10**3 # To match kernel units
+    
+    integrals = []
     
     for i, row in df.iterrows():
         print(f'Processing row {i} out of {df.shape[0]}')
-        slope = row["slope"] * 10**3 # To match kernel units
         kernel_filename = create_kernel_filename(mode=row["mode"], geometry=row["geometry"], distance=row["distance"])
         integral = get_integral_from_kernel_file(root_dir=KERNEL_ROOT_DIR, filename=kernel_filename)
-        
-        slopes.append(slope)
         integrals.append(integral)
         
+    df["integral"] = integrals
+        
     # Fit data with linear regression
-    fit_slope, fit_intercept, r_value, p_value, std_err = linregress(integrals, slopes)
+    fit_slope, fit_intercept, r_value, p_value, std_err = linregress(df["integral"], df["slope"])
+    fit_slope, fit_intercept = round(fit_slope, 2), round(fit_intercept, 2)
     
     fig, ax = plt.subplots(figsize=(8, 6))
     
