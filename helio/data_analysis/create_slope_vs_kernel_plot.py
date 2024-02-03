@@ -16,19 +16,23 @@ DATA_FILE_PATH = "/Users/daniel/Downloads/slopes_and_intercepts.csv"
 KERNEL_ROOT_DIR = "/Users/daniel/Downloads/kernels/kernels"
 OUTPUT_FILE_PATH = "/nfshome/chmurnyd/slope_vs_kernel.png"
 
-colors_dict = {
-    'f': '#1f77b4',   # Blue
-    'p1': '#ff7f0e',  # Orange
-    'p2': '#2ca02c',  # Green
-    'p3': '#d62728',  # Red
-    'p4': '#9467bd',  # Purple
-    'td1': '#8c564b', # Brown
-    'td2': '#e377c2', # Pink
-    'td3': '#7f7f7f', # Gray
-    'td4': '#bcbd22', # Olive
-    'td5': '#17becf', # Cyan
-    'td6': '#9b59b6', # Lavender
-    'dt7': '#3498db'  # Sky Blue
+MODE_COLORS_DICT = {
+    'f': '#1f77b4',    # Blue
+    'p1': '#ff7f0e',   # Orange
+    'p2': '#2ca02c',   # Lime Green
+    'p3': '#d62728',   # Crimson Red
+    'p4': '#9467bd',   # Violet
+    'td1': '#8c564b',  # Rustic Brown
+    'td2': '#e377c2',  # Rosy Pink
+    'td3': '#7f7f7f',  # Charcoal Gray
+    'td4': '#bcbd22',  # Olive
+    'td5': '#17becf',  # Electric Cyan
+    'td6': '#9b59b6',  # Mauve Lavender
+    'td7': '#3498db',  # Sky Blue
+    'td8': '#ff0000',  # Bright Red
+    'td9': '#00ff00',  # Vivid Green
+    'td10': '#0000ff', # Royal Blue
+    'td11': '#ffff00'  # Sunshine Yellow
 }
 
 def create_kernel_filename(mode: str, geometry: str, distance: Union[int, float]):
