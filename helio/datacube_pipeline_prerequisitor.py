@@ -1,8 +1,8 @@
 import os
 import shutil
 import json
-import numpy as np
 import itertools
+import random
 
 from datacube_maker.utils import create_request_name_from_request_string, create_datacube_directory_name
 # from log import setup_logger TODO: Fix and reintroduce logger
@@ -52,10 +52,10 @@ DRMS_REQUESTS: dict[str, dict] = {
     }
 }
 LATITUDES: list[float] = [0.0]
-LOWER_VELOCITY_LIMIT: float = -500.
-UPPER_VELOCITY_LIMIT: float = 500.
+LOWER_VELOCITY_LIMIT: int = -500
+UPPER_VELOCITY_LIMIT: int = 500
 VELOCITY_SAMPLE_COUNT: int = 10
-OUTPUT_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/Datacubes"
+OUTPUT_ROOT_FOLDER: str = "/nfshome/chmurnyd/Datacubes"
 
 ### AUTOMATED PART SETTINGS END ###
 
@@ -69,12 +69,12 @@ SCALE: list[float] = [0.12, 0.12]
 R_SUN: float = 696.0
 JSOC_EMAIL: str = "daniel123chmurny@gmail.com"
 
-TRAVEL_TIMES_ROOT_FOLDER: str = "/nfsscratch/chmurnyd/travel-times"
+TRAVEL_TIMES_ROOT_FOLDER: str = "/nfshome/chmurnyd/travel-times"
 PARAM_EXAMPLE_CONF_PATH: str = os.path.join(TRAVEL_TIMES_ROOT_FOLDER, "PARAM-EXAMPLE.conf")
 
 ### STATIC CONF SETTINGS END ###
 
-REQUESTS_FILE_PATH = "/nfshome/chmurnyd/GitHub/thesis-work/datacube_pipeline_helper_files/requests_ready_for_download.json"
+REQUESTS_FILE_PATH = "/nfshome/chmurnyd/GitHub/thesis-work/helio/datacube_pipeline_helper_files/requests_ready_for_download.json"
 
 # TODO: Fix and reintroduce logger
 # module_logger = setup_logger(__name__)
@@ -253,7 +253,9 @@ if __name__ == "__main__":
         print(f'Creating root directory "{OUTPUT_ROOT_FOLDER}"...')
         os.makedirs(OUTPUT_ROOT_FOLDER)
 
-    velocities = np.floor(np.linspace(start=LOWER_VELOCITY_LIMIT, stop=UPPER_VELOCITY_LIMIT, num=VELOCITY_SAMPLE_COUNT))
+    velocities = random.sample(range(LOWER_VELOCITY_LIMIT, UPPER_VELOCITY_LIMIT + 1), VELOCITY_SAMPLE_COUNT)
+    # velocities = np.floor(np.linspace(start=LOWER_VELOCITY_LIMIT, stop=UPPER_VELOCITY_LIMIT, num=VELOCITY_SAMPLE_COUNT))
+    
     datacube_maker_inputs, request_output_dir_dict = create_folder_structure(DRMS_REQUESTS, velocities, LATITUDES, 
                                                                              OUTPUT_ROOT_FOLDER, TRAVEL_TIMES_ROOT_FOLDER)
     
