@@ -234,6 +234,9 @@ def create_folder_structure(drms_requests: dict[str, dict], velocities:list[floa
                 travel_time_outdir_path = os.path.join(travel_times_root_folder, travel_time_outdir)
                 os.makedirs(travel_time_outdir_path)
                 
+                travel_time_logs_path = os.path.join(travel_time_outdir_path, "logs")
+                os.makedirs(travel_time_logs_path)
+                
                 update_datacube_path_and_traveltime_outdir_in_new_travel_time_conf(new_travel_time_conf_path, 
                                                                                    datacube_path, travel_time_outdir)
                     
@@ -241,7 +244,8 @@ def create_folder_structure(drms_requests: dict[str, dict], velocities:list[floa
                     "working_dir": os.path.abspath("datacube_maker"),
                     "log_dir": logs_path,
                     "conf_file": conf_file_path,
-                    "TT_conf_file": traveltime_conf_file_name
+                    "TT_conf_file": traveltime_conf_file_name,
+                    "TT_log_dir": travel_time_logs_path
                 }
                 
                 datacube_maker_inputs.append(datacube_maker_input)
