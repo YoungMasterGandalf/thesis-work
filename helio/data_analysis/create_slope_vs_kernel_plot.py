@@ -76,7 +76,11 @@ if __name__ == "__main__":
     
     fig, ax = plt.subplots(figsize=(8, 6))
     
-    ax.scatter(integrals, slopes, label="Linear regressions' slopes vs. kernels")
+    for mode, color in MODE_COLORS_DICT.items():
+        sub_df = df[df["mode"] == mode]
+        mode_integrals = sub_df["integral"]
+        mode_slopes = sub_df["slope"]
+        ax.scatter(mode_integrals, mode_slopes, c=color, label=mode)
 
     line = np.poly1d([fit_slope, fit_intercept])
     plt.plot(integrals, line(integrals), color='red', label=f'Linear fit (y = {fit_slope}x + {fit_intercept})')
