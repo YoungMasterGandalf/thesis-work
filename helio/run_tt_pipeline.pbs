@@ -18,6 +18,9 @@
 # Sends mail to the user when the job aborts, begins, end.
 #PBS -m a
 
+#PBS -o ${LD}/TT_log_${PBS_JOBID}-${PBS_ARRAYID}.out
+#PBS -e ${LD}/TT_log_${PBS_JOBID}-${PBS_ARRAYID}.err
+
 #PBS -V
 PBS_O_WORKDIR=${WD}
 
