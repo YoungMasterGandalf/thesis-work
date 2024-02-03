@@ -92,7 +92,7 @@ if __name__ == "__main__":
     ax.set_ylabel(r'Linear regression slope', fontsize=14)
 
     # Legend
-    ax.legend()
+    ax.legend(frameon=False)
 
     # Ticks
     ax.tick_params(axis='both', which='major', labelsize=10)
