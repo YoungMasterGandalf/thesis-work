@@ -8,7 +8,8 @@ drms_ld=$4
 drms_conffile=$5
 
 tt_wd=$6
-tt_conffile=$7
+tt_ld=$7
+tt_conffile=$8
 
 cd $drms_path
 
@@ -22,7 +23,7 @@ echo $drms_output
 
 cd $tt_path
 ## Run on radegast-local only --> should solve some issues with passing logs
-tt_output=`qsub -l nodes=radegast-local -W depend=afterok:$drms_output -v WD=$tt_wd,CONFFILE=$tt_conffile run_tt_pipeline.pbs`
+tt_output=`qsub -l nodes=radegast-local -W depend=afterok:$drms_output -v WD=$tt_wd,LD=$tt_ld,CONFFILE=$tt_conffile run_tt_pipeline.pbs`
 
 ## Run on any core --> better not use this
 # tt_output=`qsub -W depend=afterok:$drms_output -v WD=$tt_wd,CONFFILE=$tt_conffile run_tt_pipeline.pbs`
