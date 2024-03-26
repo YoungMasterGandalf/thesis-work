@@ -116,7 +116,7 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
 
     return total_df
 
-def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, mode, geometry, distance, output_file_path):
+def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, slope, intercept, mode, geometry, distance, output_file_path):
     fig, ax = plt.subplots(figsize=(8, 6))
     
     ax.scatter(velocities, mean_traveltimes, label='Mean traveltimes around center')
@@ -167,8 +167,8 @@ if __name__ == "__main__":
         slope, intercept, r_value, p_value, std_err = linregress(filtered_velocities, filtered_mean_traveltimes)
         
         output_file_path = os.path.join(OUTPUT_DIR, OUTPUT_FILENAME)
-        create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, 
-                                                mode=MODE, geometry=GEOMETRY, distance=DISTANCE, 
+        create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, slope=slope,
+                                                intercept=intercept, mode=MODE, geometry=GEOMETRY, distance=DISTANCE, 
                                                 output_file_path=output_file_path)
     else:
         slope_intercept_df = pd.DataFrame(columns=['slope', 'intercept'])
@@ -206,8 +206,9 @@ if __name__ == "__main__":
                     
                     output_filename = f'{mode}_{geometry}_{distance}.png'
                     output_file_path = os.path.join(OUTPUT_DIR, output_filename)
-                    create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, 
-                                                            mode=mode, geometry=geometry, distance=distance, 
+                    create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes,
+                                                            slope=slope, intercept=intercept, mode=mode,
+                                                            geometry=geometry, distance=distance,
                                                             output_file_path=output_file_path)
                     print('Plot finished.\n')
                     
