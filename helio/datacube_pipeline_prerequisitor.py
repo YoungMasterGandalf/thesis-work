@@ -10,44 +10,44 @@ from datacube_maker.utils import create_request_name_from_request_string, create
 ### AUTOMATED PART SETTINGS ###
 
 DRMS_REQUESTS: dict[str, dict] = {
-    "hmi.v_45s[2018.03.26_00:00:00_TAI-2018.03.27_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
+    "hmi.v_45s[2017.03.12_00:00:00_TAI-2017.03.12_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2017.03.12_00.00.00_6h_data",
+        "origin_longitudes": [280.]
+    },
+    "hmi.v_45s[2017.05.12_00:00:00_TAI-2017.05.12_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2017.05.12_00.00.00_6h_data",
+        "origin_longitudes": [200.]
+    },
+    "hmi.v_45s[2017.08.13_00:00:00_TAI-2017.08.13_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2017.08.13_00.00.00_6h_data",
+        "origin_longitudes": [40.]
+    },
+    "hmi.v_45s[2017.10.08_00:00:00_TAI-2017.10.08_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2017.10.08_00.00.00_6h_data",
+        "origin_longitudes": [30.]
+    },
+    "hmi.v_45s[2017.11.03_00:00:00_TAI-2017.11.03_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2017.11.03_00.00.00_6h_data",
+        "origin_longitudes": [40.]
+    },
+    "hmi.v_45s[2017.12.01_00:00:00_TAI-2017.12.01_00:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2017.12.01_00.00.00_6h_data",
+        "origin_longitudes": [40.]
+    },
+    "hmi.v_45s[2018.03.26_00:00:00_TAI-2018.03.26_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2018.03.26_00.00.00_6h_data",
         "origin_longitudes": [310.]
     },
-    "hmi.v_45s[2018.11.09_00:00:00_TAI-2018.11.10_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
-        "origin_longitudes": [190.]
+    "hmi.v_45s[2019.01.20_00:00:00_TAI-2019.01.20_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2019.01.20_00.00.00_6h_data",
+        "origin_longitudes": [315.]
     },
-    "hmi.v_45s[2019.02.25_00:00:00_TAI-2019.02.26_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
-        "origin_longitudes": [210.]
-    },
-    "hmi.v_45s[2019.08.28_00:00:00_TAI-2019.08.29_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
-        "origin_longitudes": [290.]
-    },
-    "hmi.v_45s[2019.09.11_00:00:00_TAI-2019.09.12_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
-        "origin_longitudes": [100.]
-    },
-    "hmi.v_45s[2019.12.19_00:00:00_TAI-2019.12.20_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
+    "hmi.v_45s[2019.12.19_00:00:00_TAI-2019.12.19_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2019.12.19_00.00.00_6h_data",
         "origin_longitudes": [70.]
     },
-    "hmi.v_45s[2020.01.16_00:00:00_TAI-2020.01.17_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
-        "origin_longitudes": [230.]
-    },
-    "hmi.v_45s[2020.02.12_00:00:00_TAI-2020.02.13_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
-        "origin_longitudes": [230.]
-    },
-    "hmi.v_45s[2020.04.13_00:00:00_TAI-2020.04.14_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
-        "origin_longitudes": [160.]
-    },
-    "hmi.v_45s[2020.05.10_00:00:00_TAI-2020.05.11_00:00:00_TAI]{Dopplergram}": {
-        "data_path": None,
+    "hmi.v_45s[2020.05.10_00:00:00_TAI-2020.05.10_06:00:00_TAI]{Dopplergram}": {
+        "data_path": "/nfshome/chmurnyd/datacubes-data/datacubes_6h/hmi.v_45s_2020.05.10_00.00.00_6h_data",
         "origin_longitudes": [160.]
     }
 }
@@ -234,6 +234,9 @@ def create_folder_structure(drms_requests: dict[str, dict], velocities:list[floa
                 travel_time_outdir_path = os.path.join(travel_times_root_folder, travel_time_outdir)
                 os.makedirs(travel_time_outdir_path)
                 
+                travel_time_logs_path = os.path.join(travel_time_outdir_path, "logs")
+                os.makedirs(travel_time_logs_path)
+                
                 update_datacube_path_and_traveltime_outdir_in_new_travel_time_conf(new_travel_time_conf_path, 
                                                                                    datacube_path, travel_time_outdir)
                     
@@ -241,7 +244,8 @@ def create_folder_structure(drms_requests: dict[str, dict], velocities:list[floa
                     "working_dir": os.path.abspath("datacube_maker"),
                     "log_dir": logs_path,
                     "conf_file": conf_file_path,
-                    "TT_conf_file": traveltime_conf_file_name
+                    "TT_conf_file": traveltime_conf_file_name,
+                    "TT_log_dir": travel_time_logs_path
                 }
                 
                 datacube_maker_inputs.append(datacube_maker_input)
