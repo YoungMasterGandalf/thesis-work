@@ -9,8 +9,7 @@ import numpy as np
 from scipy.stats import linregress
 from typing import Literal
 
-# PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)"
-PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_0_vel_(plus|minus)_(\d+)"
+PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)"
 DATA_FILE_NAME: str = "tt_data_analysis.csv"
 OUTPUT_DIR: str = "/nfshome/chmurnyd"
 
@@ -66,10 +65,8 @@ def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
         if os.path.isdir(folder) and match:
             data_file_path = os.path.join(folder, DATA_FILE_NAME)
             if os.path.isfile(data_file_path):
-                # velocity_sign = match.group(8)
-                # velocity_value = match.group(9)
-                velocity_sign = match.group(7)
-                velocity_value = match.group(8)
+                velocity_sign = match.group(8)
+                velocity_value = match.group(9)
                 velocity_value = create_velocity_value_from_string_representation(velocity_sign_str=velocity_sign, 
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
@@ -103,10 +100,8 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
         if os.path.isdir(folder) and match:
             data_file_path = os.path.join(folder, DATA_FILE_NAME)
             if os.path.isfile(data_file_path):
-                # velocity_sign = match.group(8)
-                # velocity_value = match.group(9)
-                velocity_sign = match.group(7)
-                velocity_value = match.group(8)
+                velocity_sign = match.group(8)
+                velocity_value = match.group(9)
                 velocity_value = create_velocity_value_from_string_representation(velocity_sign_str=velocity_sign, 
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
