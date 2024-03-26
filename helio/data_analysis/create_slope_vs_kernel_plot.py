@@ -85,6 +85,8 @@ if __name__ == "__main__":
     line = np.poly1d([fit_slope, fit_intercept])
     plt.plot(integrals, line(integrals), color='red', label=f'Linear fit (y = {fit_slope}x + {fit_intercept})')
     
+    plt.plot([min(integrals), max(integrals)], [-min(integrals), -max(integrals)], 'k--', lw=0.75) # Plot 'y = -x' control line
+    
     ax.set_title("Kernel integrals vs. linear regressions slopes")
 
     # Labels
