@@ -106,11 +106,7 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
                 df['velocity'] = velocity_value
-                # Filter DataFrame and get traveltime_mean value
-                # traveltime_mean = df.loc[(df['mode'] == MODE) & (df['geometry'] == GEOMETRY) & (df['distance'] == DISTANCE), 
-                #                          'traveltime_mean'].values[0]
-                # velocities.append(velocity_value)
-                # mean_traveltimes.append(traveltime_mean)
+                
                 if type(total_df) == pd.DataFrame:
                     total_df = pd.concat([total_df, df], ignore_index=True)
                 else:
