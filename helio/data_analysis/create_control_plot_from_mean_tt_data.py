@@ -41,8 +41,8 @@ MODE_DISTANCE_MAPPING: dict = {
     'td10': [35, 36, 38, 39, 41],
     'td11': [39, 40, 42, 44, 46]
     }
-# GEOMETRIES = ["cos_m0", "cos_m1", "sin_m1"]
-GEOMETRIES = ["cos_m1"]
+
+GEOMETRIES = ["cos_m1"] # May contain: "cos_m0", "cos_m1", "sin_m1"
 
 def create_velocity_value_from_string_representation(velocity_sign_str: str, velocity_value_str: str):
     velocity_value = ast.literal_eval(velocity_value_str)
