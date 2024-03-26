@@ -138,10 +138,6 @@ def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, mode, 
     ax.minorticks_on()
     ax.tick_params(axis='both', which='minor', labelsize=8)
 
-    # Gridlines for scientific plot design
-    ax.grid(which='major', linestyle='-', linewidth='0.5', color='black')
-    ax.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
-
     # Save plot
     plt.savefig(output_file_path, dpi=600)
     
