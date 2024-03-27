@@ -82,6 +82,15 @@ def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
 
     return velocities, mean_traveltimes
 
+def parse_jsoc_query_part_from_TT_folder_path(folder_path: str):
+    folder_name = folder_path.split('/')[-1]
+    
+    start_index = folder_name.index("hmi.")
+    stop_index = folder_name.index("_lon")
+    query_part = folder_name[start_index : stop_index]
+    
+    return query_part
+
 def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
     # Go to the folder
     os.chdir(folder_path)
