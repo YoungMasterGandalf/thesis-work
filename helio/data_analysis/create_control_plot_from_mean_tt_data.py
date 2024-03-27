@@ -241,12 +241,12 @@ if __name__ == "__main__":
                         
                     
                     slope_wavg = ufloat(
-                        sum([slope.n/slope.s**2 for slope in slopes]) / sum([1/slope.s**2] for slope in slopes),
-                        1/np.sqrt(sum([1/slope.s**2] for slope in slopes))
+                        sum([slope.n/slope.s**2 for slope in slopes]) / sum([1/slope.s**2 for slope in slopes]),
+                        1/np.sqrt(sum([1/slope.s**2 for slope in slopes]))
                         )
                     intercept_wavg = ufloat(
-                        sum([intercept.n/intercept.s**2 for intercept in intercepts]) / sum([1/intercept.s**2] for intercept in intercepts),
-                        1/np.sqrt(sum([1/intercept.s**2] for intercept in intercepts))
+                        sum([intercept.n/intercept.s**2 for intercept in intercepts]) / sum([1/intercept.s**2 for intercept in intercepts]),
+                        1/np.sqrt(sum([1/intercept.s**2 for intercept in intercepts]))
                         )
                         
                     new_row_columns = ['mode', 'geometry', 'distance', 'slope', 'slope_err', 'intercept', 'intercept_err']
