@@ -178,7 +178,9 @@ if __name__ == "__main__":
         filtered_pairs = [(velocity, traveltime) for velocity, traveltime in velocity_tt_pairs if -300 <= velocity <= 300]
         filtered_velocities = [x[0] for x in filtered_pairs]
         filtered_mean_traveltimes = [x[1] for x in filtered_pairs]
-        slope, intercept, r_value, p_value, std_err = linregress(filtered_velocities, filtered_mean_traveltimes)
+        
+        result = linregress(filtered_velocities, filtered_mean_traveltimes)
+        slope, intercept = result.slope, result.intercept
         
         output_file_path = os.path.join(OUTPUT_DIR, OUTPUT_FILENAME)
         create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, slope=slope,
@@ -216,7 +218,10 @@ if __name__ == "__main__":
                         filtered_pairs = [(velocity, traveltime) for velocity, traveltime in velocity_tt_pairs if -300 <= velocity <= 300]
                         filtered_velocities = [x[0] for x in filtered_pairs]
                         filtered_mean_traveltimes = [x[1] for x in filtered_pairs]
-                        slope, intercept, r_value, p_value, slope_stderr, intercept_stderr = linregress(filtered_velocities, filtered_mean_traveltimes)
+                        
+                        result = linregress(filtered_velocities, filtered_mean_traveltimes)
+                        slope, slope_stderr  = result.slope, result.stderr
+                        intercept, intercept_stderr = result.intercept, result.intercept_stderr
                         
                         slopes.append(ufloat(slope, slope_stderr))
                         intercepts.append(ufloat(intercept, intercept_stderr))
