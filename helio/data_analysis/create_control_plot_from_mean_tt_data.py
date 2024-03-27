@@ -116,6 +116,9 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
                 df = pd.read_csv(data_file_path)
                 df['velocity'] = velocity_value
                 
+                jsoc_query_part = parse_jsoc_query_part_from_TT_folder_path(folder_path=folder)
+                df['dataset'] = jsoc_query_part
+                
                 if type(total_df) == pd.DataFrame:
                     total_df = pd.concat([total_df, df], ignore_index=True)
                 else:
