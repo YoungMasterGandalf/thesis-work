@@ -144,8 +144,8 @@ def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, slope,
         ax.set_title(f'{mode}_{geometry}_{distance}')
 
     # Labels
-    ax.set_xlabel(r'Planted longitudinal velocity $(ms^{-1})$', fontsize=14)
-    ax.set_ylabel(r'Mean travel time around center $(s)$', fontsize=14)
+    ax.set_xlabel(r'Planted longitudinal velocity (ms$^{-1})$', fontsize=14)
+    ax.set_ylabel(r'Mean travel time around center (s)', fontsize=14)
 
     # Legend
     ax.legend()
