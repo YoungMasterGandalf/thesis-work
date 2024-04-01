@@ -14,6 +14,8 @@ PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|min
 DATA_FILE_NAME: str = "tt_data_analysis.csv"
 OUTPUT_DIR: str = "/nfshome/chmurnyd"
 
+INCLUDE_PLOT_TITLE: bool = False
+
 SINGLE_PLOT_MODE: bool = True
 
 # Single plot mode configuration
@@ -138,7 +140,8 @@ def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, slope,
     line = np.poly1d([slope, intercept])
     plt.plot(velocities, line(velocities), color='red', label=f'Linear fit (y = {slope}x + {intercept})')
     
-    ax.set_title(f'{mode}_{geometry}_{distance}')
+    if INCLUDE_PLOT_TITLE:
+        ax.set_title(f'{mode}_{geometry}_{distance}')
 
     # Labels
     ax.set_xlabel(r'Planted longitudinal velocity $(ms^{-1})$', fontsize=14)
