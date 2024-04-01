@@ -138,7 +138,7 @@ def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, slope,
     ax.scatter(velocities, mean_traveltimes, label=scatter_legend)
 
     line = np.poly1d([slope, intercept])
-    plt.plot(velocities, line(velocities), color='red', label=f'Linear fit (y = {slope}x + {intercept})')
+    plt.plot(velocities, line(velocities), color='red', label=r'Linear fit in range (-300, 300) ms$^{-1}$')
     
     if INCLUDE_PLOT_TITLE:
         ax.set_title(f'{mode}_{geometry}_{distance}')
