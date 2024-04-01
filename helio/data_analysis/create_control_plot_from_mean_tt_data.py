@@ -239,7 +239,7 @@ if __name__ == "__main__":
                         create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes,
                                                                 slope=slope, intercept=intercept, mode=mode,
                                                                 geometry=geometry, distance=distance,
-                                                                output_file_path=output_file_path)
+                                                                output_file_path=output_file_path, dataset_id=dataset_id)
                         print('Plot finished.\n')
                         
                     
