@@ -101,10 +101,6 @@ if __name__ == "__main__":
     ax.minorticks_on()
     ax.tick_params(axis='both', which='minor', labelsize=8)
 
-    # Gridlines for scientific plot design
-    # ax.grid(which='major', linestyle='-', linewidth='0.5', color='black')
-    # ax.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
-
     # Save plot
     plt.savefig(OUTPUT_FILE_PATH, dpi=600)
     

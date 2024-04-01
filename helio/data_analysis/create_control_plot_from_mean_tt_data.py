@@ -8,11 +8,13 @@ import numpy as np
 
 from scipy.stats import linregress
 from typing import Literal
+from uncertainties import ufloat
 
-# PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)"
-PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_0_vel_(plus|minus)_(\d+)"
+PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)"
 DATA_FILE_NAME: str = "tt_data_analysis.csv"
 OUTPUT_DIR: str = "/nfshome/chmurnyd"
+
+INCLUDE_PLOT_TITLE: bool = False
 
 SINGLE_PLOT_MODE: bool = True
 
@@ -42,8 +44,8 @@ MODE_DISTANCE_MAPPING: dict = {
     'td10': [35, 36, 38, 39, 41],
     'td11': [39, 40, 42, 44, 46]
     }
-# GEOMETRIES = ["cos_m0", "cos_m1", "sin_m1"]
-GEOMETRIES = ["cos_m1"]
+
+GEOMETRIES = ["cos_m1"] # May contain: "cos_m0", "cos_m1", "sin_m1"
 
 def create_velocity_value_from_string_representation(velocity_sign_str: str, velocity_value_str: str):
     velocity_value = ast.literal_eval(velocity_value_str)
@@ -66,10 +68,8 @@ def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
         if os.path.isdir(folder) and match:
             data_file_path = os.path.join(folder, DATA_FILE_NAME)
             if os.path.isfile(data_file_path):
-                # velocity_sign = match.group(8)
-                # velocity_value = match.group(9)
-                velocity_sign = match.group(7)
-                velocity_value = match.group(8)
+                velocity_sign = match.group(8)
+                velocity_value = match.group(9)
                 velocity_value = create_velocity_value_from_string_representation(velocity_sign_str=velocity_sign, 
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
@@ -84,6 +84,15 @@ def get_velocities_and_mean_traveltimes_for_one_plot_case(folder_path, pattern):
                 mean_traveltimes.append(traveltime_mean)
 
     return velocities, mean_traveltimes
+
+def parse_jsoc_query_part_from_TT_folder_path(folder_path: str):
+    folder_name = folder_path.split('/')[-1]
+    
+    start_index = folder_name.index("hmi.")
+    stop_index = folder_name.index("_lon")
+    query_part = folder_name[start_index : stop_index]
+    
+    return query_part
 
 def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
     # Go to the folder
@@ -103,19 +112,16 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
         if os.path.isdir(folder) and match:
             data_file_path = os.path.join(folder, DATA_FILE_NAME)
             if os.path.isfile(data_file_path):
-                # velocity_sign = match.group(8)
-                # velocity_value = match.group(9)
-                velocity_sign = match.group(7)
-                velocity_value = match.group(8)
+                velocity_sign = match.group(8)
+                velocity_value = match.group(9)
                 velocity_value = create_velocity_value_from_string_representation(velocity_sign_str=velocity_sign, 
                                                                                   velocity_value_str=velocity_value)
                 df = pd.read_csv(data_file_path)
                 df['velocity'] = velocity_value
-                # Filter DataFrame and get traveltime_mean value
-                # traveltime_mean = df.loc[(df['mode'] == MODE) & (df['geometry'] == GEOMETRY) & (df['distance'] == DISTANCE), 
-                #                          'traveltime_mean'].values[0]
-                # velocities.append(velocity_value)
-                # mean_traveltimes.append(traveltime_mean)
+                
+                jsoc_query_part = parse_jsoc_query_part_from_TT_folder_path(folder_path=folder)
+                df['dataset'] = jsoc_query_part
+                
                 if type(total_df) == pd.DataFrame:
                     total_df = pd.concat([total_df, df], ignore_index=True)
                 else:
@@ -125,19 +131,21 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
 
     return total_df
 
-def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, mode, geometry, distance, output_file_path):
+def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, slope, intercept, mode, geometry, distance, output_file_path, dataset_id=None):
     fig, ax = plt.subplots(figsize=(8, 6))
     
-    ax.scatter(velocities, mean_traveltimes, label='Mean traveltimes around center')
+    scatter_legend = f'Mean traveltimes around center (dataset: {dataset_id})' if dataset_id else 'Mean traveltimes around center'
+    ax.scatter(velocities, mean_traveltimes, label=scatter_legend)
 
     line = np.poly1d([slope, intercept])
-    plt.plot(velocities, line(velocities), color='red', label=f'Linear fit (y = {slope}x + {intercept})')
+    plt.plot(velocities, line(velocities), color='red', label=r'Linear fit in range (-300, 300) ms$^{-1}$')
     
-    ax.set_title(f'{mode}_{geometry}_{distance}')
+    if INCLUDE_PLOT_TITLE:
+        ax.set_title(f'{mode}_{geometry}_{distance}')
 
     # Labels
-    ax.set_xlabel(r'Planted longitudinal velocity $(ms^{-1})$', fontsize=14)
-    ax.set_ylabel(r'Mean travel time around center $(s)$', fontsize=14)
+    ax.set_xlabel(r'Planted longitudinal velocity (ms$^{-1})$', fontsize=14)
+    ax.set_ylabel(r'Mean travel time around center (s)', fontsize=14)
 
     # Legend
     ax.legend()
@@ -146,10 +154,6 @@ def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, mode, 
     ax.tick_params(axis='both', which='major', labelsize=10)
     ax.minorticks_on()
     ax.tick_params(axis='both', which='minor', labelsize=8)
-
-    # Gridlines for scientific plot design
-    ax.grid(which='major', linestyle='-', linewidth='0.5', color='black')
-    ax.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
 
     # Save plot
     plt.savefig(output_file_path, dpi=600)
@@ -177,52 +181,81 @@ if __name__ == "__main__":
         filtered_pairs = [(velocity, traveltime) for velocity, traveltime in velocity_tt_pairs if -300 <= velocity <= 300]
         filtered_velocities = [x[0] for x in filtered_pairs]
         filtered_mean_traveltimes = [x[1] for x in filtered_pairs]
-        slope, intercept, r_value, p_value, std_err = linregress(filtered_velocities, filtered_mean_traveltimes)
+        
+        result = linregress(filtered_velocities, filtered_mean_traveltimes)
+        slope, intercept = result.slope, result.intercept
         
         output_file_path = os.path.join(OUTPUT_DIR, OUTPUT_FILENAME)
-        create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, 
-                                                mode=MODE, geometry=GEOMETRY, distance=DISTANCE, 
+        create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, slope=slope,
+                                                intercept=intercept, mode=MODE, geometry=GEOMETRY, distance=DISTANCE, 
                                                 output_file_path=output_file_path)
     else:
         slope_intercept_df = pd.DataFrame(columns=['slope', 'intercept'])
         
         total_df = get_combined_dataframe_for_multiplot_case(folder_path=folder_path, pattern=PATTERN)
+        dataset_ids = total_df['dataset'].unique().tolist()
         
         print('Starting multiplot creation (this might take a while)...\n')
         
         for mode, mode_distances in MODE_DISTANCE_MAPPING.items():
             for distance in mode_distances:
                 for geometry in GEOMETRIES:
-                    print(f'Creating plot for configuration: {mode}_{geometry}_{distance}')
+                    slopes, intercepts = [], []
                     
-                    # To ensure "half away from zero" strategy instead of "half to even"
-                    distance_with_added_bias = distance + min(0.01 * distance, 0.001)
-                    
-                    velocities_and_mean_traveltimes = total_df.loc[
-                        (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & (total_df['distance'].round() == round(distance_with_added_bias)), 
-                        ['velocity', 'traveltime_mean']
-                        ]
-                    velocities = velocities_and_mean_traveltimes['velocity'].tolist()
-                    mean_traveltimes = velocities_and_mean_traveltimes['traveltime_mean'].tolist()
-                    
-                    # Fit data with linear regression on velocity interval (-300, 300) --> to avoid non-linearities
-                    velocity_tt_pairs = list(zip(velocities, mean_traveltimes))
-                    filtered_pairs = [(velocity, traveltime) for velocity, traveltime in velocity_tt_pairs if -300 <= velocity <= 300]
-                    filtered_velocities = [x[0] for x in filtered_pairs]
-                    filtered_mean_traveltimes = [x[1] for x in filtered_pairs]
-                    slope, intercept, r_value, p_value, std_err = linregress(filtered_velocities, filtered_mean_traveltimes)
+                    for dataset_id in dataset_ids:
+                        print(f'Creating plot for configuration: {mode}_{geometry}_{distance}')
+                        
+                        # To ensure "half away from zero" strategy instead of "half to even"
+                        distance_with_added_bias = distance + min(0.01 * distance, 0.001)
+                        
+                        velocities_and_mean_traveltimes = total_df.loc[
+                            (total_df['mode'] == mode) & (total_df['geometry'] == geometry) & 
+                            (total_df['distance'].round() == round(distance_with_added_bias)) & (total_df['dataset'] == dataset_id), 
+                            ['velocity', 'traveltime_mean']
+                            ]
+                        velocities = velocities_and_mean_traveltimes['velocity'].tolist()
+                        mean_traveltimes = velocities_and_mean_traveltimes['traveltime_mean'].tolist()
+                        
+                        # Fit data with linear regression on velocity interval (-300, 300) --> to avoid non-linearities
+                        velocity_tt_pairs = list(zip(velocities, mean_traveltimes))
+                        filtered_pairs = [(velocity, traveltime) for velocity, traveltime in velocity_tt_pairs if -300 <= velocity <= 300]
+                        filtered_velocities = [x[0] for x in filtered_pairs]
+                        filtered_mean_traveltimes = [x[1] for x in filtered_pairs]
+                        
+                        result = linregress(filtered_velocities, filtered_mean_traveltimes)
+                        slope, slope_stderr  = result.slope, result.stderr
+                        intercept, intercept_stderr = result.intercept, result.intercept_stderr
+                        
+                        slopes.append(ufloat(slope, slope_stderr))
+                        intercepts.append(ufloat(intercept, intercept_stderr))
 
-                    new_row_columns = ['mode', 'geometry', 'distance', 'slope', 'intercept']
-                    new_row_data = [[mode, geometry, distance, slope, intercept]]
+                        # new_row_columns = ['mode', 'geometry', 'distance', 'slope', 'slope_err', 'intercept', 'intercept_err']
+                        # new_row_data = [[mode, geometry, distance, slope, slope_stderr, intercept, intercept_stderr]]
+                        # new_row_df = pd.DataFrame(new_row_data, columns=new_row_columns)
+                        # slope_intercept_df = pd.concat([slope_intercept_df, new_row_df], ignore_index=True)
+                        
+                        output_filename = f'{mode}_{geometry}_{distance}_{dataset_id}.png'
+                        output_file_path = os.path.join(OUTPUT_DIR, output_filename)
+                        create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes,
+                                                                slope=slope, intercept=intercept, mode=mode,
+                                                                geometry=geometry, distance=distance,
+                                                                output_file_path=output_file_path, dataset_id=dataset_id)
+                        print('Plot finished.\n')
+                        
+                    
+                    slope_wavg = ufloat(
+                        sum([slope.n/slope.s**2 for slope in slopes]) / sum([1/slope.s**2 for slope in slopes]),
+                        1/np.sqrt(sum([1/slope.s**2 for slope in slopes]))
+                        )
+                    intercept_wavg = ufloat(
+                        sum([intercept.n/intercept.s**2 for intercept in intercepts]) / sum([1/intercept.s**2 for intercept in intercepts]),
+                        1/np.sqrt(sum([1/intercept.s**2 for intercept in intercepts]))
+                        )
+                        
+                    new_row_columns = ['mode', 'geometry', 'distance', 'slope', 'slope_err', 'intercept', 'intercept_err']
+                    new_row_data = [[mode, geometry, distance, slope_wavg.n, slope_wavg.s, intercept_wavg.n, intercept_wavg.s]]
                     new_row_df = pd.DataFrame(new_row_data, columns=new_row_columns)
                     slope_intercept_df = pd.concat([slope_intercept_df, new_row_df], ignore_index=True)
-                    
-                    output_filename = f'{mode}_{geometry}_{distance}.png'
-                    output_file_path = os.path.join(OUTPUT_DIR, output_filename)
-                    create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, 
-                                                            mode=mode, geometry=geometry, distance=distance, 
-                                                            output_file_path=output_file_path)
-                    print('Plot finished.\n')
                     
         slope_intercept_results_filename = "slopes_and_intercepts.csv"
         slope_intercept_output_path = os.path.join(OUTPUT_DIR, slope_intercept_results_filename)
