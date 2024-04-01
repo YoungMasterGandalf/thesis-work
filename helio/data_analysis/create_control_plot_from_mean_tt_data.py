@@ -134,7 +134,7 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
 def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, slope, intercept, mode, geometry, distance, output_file_path, dataset_id=None):
     fig, ax = plt.subplots(figsize=(8, 6))
     
-    scatter_legend = f'Mean traveltimes around center ({dataset_id})' if dataset_id else 'Mean traveltimes around center'
+    scatter_legend = f'Mean traveltimes around center (dataset: {dataset_id})' if dataset_id else 'Mean traveltimes around center'
     ax.scatter(velocities, mean_traveltimes, label=scatter_legend)
 
     line = np.poly1d([slope, intercept])
