@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from scipy.stats import linregress
-from typing import Literal
+from typing import Literal, Union
 from uncertainties import ufloat
+from dataclasses import dataclass
 
 PATTERN: str = "TT_hmi\.v_45s_(\d{4})\.(\d{2})\.(\d{2})_00\.00\.00_lon_(plus|minus)_(\d+)_lat_(plus|minus)_(\d+)_vel_(plus|minus)_(\d+)"
 DATA_FILE_NAME: str = "tt_data_analysis.csv"
@@ -46,6 +47,18 @@ MODE_DISTANCE_MAPPING: dict = {
     }
 
 GEOMETRIES = ["cos_m1"] # May contain: "cos_m0", "cos_m1", "sin_m1"
+
+
+@dataclass
+class PlotInput:
+    velocities: list[float]
+    mean_traveltimes: list[float]
+    slope: Union[float, None]
+    intercept: Union[float, None]
+    mode: Literal['f', 'p1', 'p2', 'p3']
+    geometry: Literal['cos_m0', 'cos_m1', 'sin_m1']
+    distance: Union[int, float]
+    output_file_path: str
 
 def create_velocity_value_from_string_representation(velocity_sign_str: str, velocity_value_str: str):
     velocity_value = ast.literal_eval(velocity_value_str)
@@ -131,16 +144,18 @@ def get_combined_dataframe_for_multiplot_case(folder_path, pattern):
 
     return total_df
 
-def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, slope, intercept, mode, geometry, distance, output_file_path):
+def create_mean_traveltime_vs_velocity_plot(input: PlotInput):
+    
     fig, ax = plt.subplots(figsize=(8, 6))
     
-    ax.scatter(velocities, mean_traveltimes, label='Mean traveltimes around center')
+    ax.scatter(input.velocities, input.mean_traveltimes, label='Mean traveltimes around center')
 
-    line = np.poly1d([slope, intercept])
-    plt.plot(velocities, line(velocities), color='red', label=r'Linear fit in range (-300, 300) ms$^{-1}$')
+    if input.slope and input.intercept:
+        line = np.poly1d([input.slope, input.intercept])
+        plt.plot(input.velocities, line(input.velocities), color='red', label=r'Linear fit in range (-300, 300) ms$^{-1}$')
     
     if INCLUDE_PLOT_TITLE:
-        ax.set_title(f'{mode}_{geometry}_{distance}')
+        ax.set_title(f'{input.mode}_{input.geometry}_{input.distance}')
 
     # Labels
     ax.set_xlabel(r'Planted longitudinal velocity (ms$^{-1})$', fontsize=14)
@@ -155,7 +170,7 @@ def create_mean_traveltime_vs_velocity_plot(velocities, mean_traveltimes, slope,
     ax.tick_params(axis='both', which='minor', labelsize=8)
 
     # Save plot
-    plt.savefig(output_file_path, dpi=600)
+    plt.savefig(input.output_file_path, dpi=600)
     
     # Close plot to release memory
     plt.close(fig)
@@ -185,9 +200,10 @@ if __name__ == "__main__":
         slope, intercept = result.slope, result.intercept
         
         output_file_path = os.path.join(OUTPUT_DIR, OUTPUT_FILENAME)
-        create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes, slope=slope,
-                                                intercept=intercept, mode=MODE, geometry=GEOMETRY, distance=DISTANCE, 
-                                                output_file_path=output_file_path)
+        
+        plot_input = PlotInput(velocities=velocities, mean_traveltimes=mean_traveltimes, slope=slope, intercept=intercept,
+                               mode=MODE, geometry=GEOMETRY, distance=DISTANCE, output_file_path=output_file_path)
+        create_mean_traveltime_vs_velocity_plot(plot_input)
     else:
         slope_intercept_df = pd.DataFrame(columns=['slope', 'intercept'])
         
@@ -202,7 +218,7 @@ if __name__ == "__main__":
                     slopes, intercepts = [], []
                     
                     for dataset_id in dataset_ids:
-                        print(f'Creating plot for configuration: {mode}_{geometry}_{distance}')
+                        print(f'Creating plot for configuration: {mode}_{geometry}_{distance}, dataset: {dataset_id}')
                         
                         # To ensure "half away from zero" strategy instead of "half to even"
                         distance_with_added_bias = distance + min(0.01 * distance, 0.001)
@@ -235,10 +251,11 @@ if __name__ == "__main__":
                         
                         output_filename = f'{mode}_{geometry}_{distance}_{dataset_id}.png'
                         output_file_path = os.path.join(OUTPUT_DIR, output_filename)
-                        create_mean_traveltime_vs_velocity_plot(velocities=velocities, mean_traveltimes=mean_traveltimes,
-                                                                slope=slope, intercept=intercept, mode=mode,
-                                                                geometry=geometry, distance=distance,
-                                                                output_file_path=output_file_path)
+                        
+                        plot_input = PlotInput(velocities=velocities, mean_traveltimes=mean_traveltimes, slope=slope,
+                                               intercept=intercept, mode=mode, geometry=geometry, distance=distance,
+                                               output_file_path=output_file_path)
+                        create_mean_traveltime_vs_velocity_plot(plot_input)
                         print('Plot finished.\n')
                         
                     
